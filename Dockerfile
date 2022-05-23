@@ -23,4 +23,5 @@ USER appuser
 ENV FLASK_ENV=production
 ENV FLASK_APP=app
 # During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
-CMD ["gunicorn", "--workers", "3", "--bind", "0.0.0.0:3333","--log-level", "info", "app:app"]
+ENTRYPOINT [ "gunicorn" ]
+CMD ["--workers", "3", "--log-level", "info", "app:app"]
