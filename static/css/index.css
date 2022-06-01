@@ -84,7 +84,9 @@ h3 {
 }
 
 ol, ul {
-  list-style: none; }
+  /* list-style: none; */
+  list-style-position: inside;
+}
 
 blockquote, q {
   quotes: none; }
@@ -356,7 +358,7 @@ svg.logo-opendata:hover path {
   color: #000000;
   letter-spacing: 0.5px; }
 
-.headline-04 {
+p,ol,ul {
   font-size: 14px;
   line-height: 160%;
   color: #000000; 

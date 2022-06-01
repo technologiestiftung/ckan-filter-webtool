@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, Response
-from utils.extractor import get_data
+from utils.extractor import fetch_data, extract_columns, filter_data, enrich_data, transform_to_json
 import json
 
 app = Flask(__name__)
@@ -17,11 +17,16 @@ def api():
     elif request.method == 'POST':
         try:
             schema_name = request.form['schemas']
-            message = get_data(schema_name)
+            dataset_json = fetch_data('2022-05-01','NOW')
+            dataset_df = extract_columns(dataset_json)
+            filtered_df = filter_data(dataset_df)
+            enriched_data = enrich_data(filtered_df)
+            final_json = transform_to_json(enriched_data)
+
         except:
-            message = {"status": "error",
+            final_json = {"status": "error",
                        "message": 'Error'}
-        payload = json.dumps(message)
+        payload = json.dumps(final_json)
         return Response(payload, status=201, mimetype='application/json')
 
 

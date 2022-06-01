@@ -30,10 +30,15 @@
       </p>
       <h1 id="title">Geodaten-Abfrage der CKAN-API</h1>
       <p class="headline-02" id="intro-text">
-        Dieses Tool macht Dinge.
+        Dieses Tool dient der Identifikation von Datensätzen aus dem Berliner Datenportal zur Übernahme in die Berliner Geodateninfrastruktur.
       </p>
-      <p class="headline-04">
-        Hier wird ein Beschreibungstext eingefügt.
+      <p>
+        Die Anwendung funktioniert in drei Schritten.
+        <ol>
+          <li>Zunächst werden auf Basis einer Abfrage des Datenregisters über die CKAN-API jene Datensätze herausgefiltert, welche noch nicht in der Geodateninfrastruktur Berlins enthalten sind und potenziell Geodaten sein könnten. Dafür wird in Titel und Beschreibung des Metadateneintrags nach verschiedenen Stichwörtern gesucht.</li>
+          <li>Im zweiten Schritt müssen die Ergebnisse manuell geprüft und um fehlende Informationen ergänzt werden.</li>
+          <li>Zuletzt kann die Ergebnisliste als XLSX oder CSV exportiert werden.</li>
+        </ol>
       </p>
     </div>
 
@@ -65,7 +70,7 @@
       </p>
       <p class="headline-04">
         Bei diesem Tool handelt es sich um einen Prototypen für einen Testbetrieb, der bei Bedarf weiterentwickelt werden kann.
-        Bei Fragen und Feedback wenden Sie sich bitte an <a href="mailto:odis@technologiestiftung-berlin.de">odis@technologiestiftung-berlin.de.</a> Der Quellcode ist <a href="https://github.com/technologiestiftung/xml-schema-validator-for-berlins-geodata" target="blank">auf GitHub verfügbar</a>.
+        Bei Fragen und Feedback wenden Sie sich bitte an <a href="mailto:odis@ts.berlin">odis@ts.berlin.</a> Der Quellcode ist <a href="https://github.com/technologiestiftung/xml-schema-validator-for-berlins-geodata" target="blank">auf GitHub verfügbar</a>.
       </p>
     </div>
     
@@ -249,8 +254,8 @@
       var rowPopupFormatter = function(e, row, onRendered){
           var data = row.getData(),
           container = document.createElement("div"),
-          contents = "<strong style='font-size:1.2em;'>" + data.title + "</strong><br/><ul style='padding:0;  margin-top:10px; margin-bottom:0;'>";
-          contents += "<li>" + data.notes + "</li>";
+          contents = "<strong style='font-size:1.2em;'>" + data.Titel + "</strong><br/><ul style='padding:0;  margin-top:10px; margin-bottom:0;'>";
+          contents += "<li>" + data.Beschreibung + "</li>";
           contents += "</ul>";
 
           container.innerHTML = contents;
@@ -348,18 +353,28 @@
                 paginationSize:20,         //allow 7 rows per page of data
                 paginationCounter:"rows", //display count of paginated rows in footer
                 movableColumns:true,      //allow column order to be changed
-                rowClickPopup:rowPopupFormatter,
+                //rowClickPopup:rowPopupFormatter,
                 initialSort:[             //set the initial sort order of the data
                   {column:"date", dir:"desc"},
                 ],
                 columns:[                 //define the table columns
-                    {title:"Titel", field:"title", headerMenu:headerMenu, headerPopup:headerPopupFormatter, headerPopupIcon:"<i class='fas fa-filter' title='Spalte filtern'></i>", headerFilter:emptyHeaderFilter, headerFilterFunc:"like"},
-                    {title:"Beschreibung", field:"notes", headerMenu:headerMenu},
-                    {title:"Bereitsteller", field:"author", editor:"input", headerMenu:headerMenu},
-                    {title:"Kontakt", field:"maintainer_contact", editor:"input", headerMenu:headerMenu},
-                    {title:"Aktualisierungsdatum", field:"date", editor:"input", headerMenu:headerMenu},
-                    {title:"Formate", field:"formats", editor:"input", headerMenu:headerMenu},
-                    {title:"Geoformat", field:"geoformat", editor:"input", headerMenu:headerMenu},
+                    {title:"Titel", field:"Titel", headerMenu:headerMenu, headerPopup:headerPopupFormatter, headerPopupIcon:"<i class='fas fa-filter' title='Spalte filtern'></i>", headerFilter:emptyHeaderFilter, headerFilterFunc:"like", clickPopup:rowPopupFormatter},
+                    //{title:"Beschreibung", field:"Beschreibung", headerMenu:headerMenu},
+                    {title:"Herausgeber:in", field:"Herausgeber:in", editor:"input", headerMenu:headerMenu},
+                    {title:"Kontakt", field:"Kontakt", editor:"input", headerMenu:headerMenu},
+                   // {title:"Formate", field:"formats", editor:"input", headerMenu:headerMenu},
+                    {title:"Geoformat", field:"Geoformat", editor:"input", headerMenu:headerMenu},
+                    {title:"Link zu einer Ressource", field:"Link zu einer Ressource", formatter:"link", headerMenu:headerMenu, formatterParams:{
+                        urlPrefix:"https://",
+                        target:"_blank",
+                    }},
+                    {title:"Link zu Datensatzeintrag", field:"Link zu Datensatzeintrag", formatter:"link", headerMenu:headerMenu,formatterParams:{
+                        target:"_blank",
+                    }},
+                    {title:"geographische Verfügbarkeit", field:"geographische Verfügbarkeit", editor:"input", headerMenu:headerMenu},
+                    {title:"Raumbezug", field:"Raumbezug", editor:"input", headerMenu:headerMenu},
+                    {title:"notwendige Maßnahme zur Geoformatierung", field:"notwendige Maßnahme zur Geoformatierung", editor:"input", headerMenu:headerMenu},
+                    {title:"Priorisierung", field:"Priorisierung", editor:"input", headerMenu:headerMenu},
                 ],
               });
               // table.on("tableBuilt", () => {
