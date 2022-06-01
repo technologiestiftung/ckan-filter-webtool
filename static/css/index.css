@@ -85,7 +85,11 @@ h3 {
 
 ol, ul {
   /* list-style: none; */
-  list-style-position: inside;
+  list-style-position: outside;
+}
+
+ol, ul {
+  padding-left: 1.5em;
 }
 
 blockquote, q {
@@ -512,7 +516,7 @@ p.copy {
 
 
 .pb-3 {
-  padding-bottom: 3rem; }
+  padding-bottom: 1rem; }
 
 .pb-6 {
   padding-bottom: 1.5rem; 
@@ -1271,10 +1275,10 @@ ul#main-navigation li.active {
 }
 
 
-svg {
+/* svg {
   display: block;
   margin-top: auto;
-}
+} */
 
 input{
   display: block;

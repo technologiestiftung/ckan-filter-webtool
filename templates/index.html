@@ -34,12 +34,12 @@
       </p>
       <p>
         Die Anwendung funktioniert in drei Schritten.
+      </p>
         <ol>
           <li>Zunächst werden auf Basis einer Abfrage des Datenregisters über die CKAN-API jene Datensätze herausgefiltert, welche noch nicht in der Geodateninfrastruktur Berlins enthalten sind und potenziell Geodaten sein könnten. Dafür wird in Titel und Beschreibung des Metadateneintrags nach verschiedenen Stichwörtern gesucht.</li>
           <li>Im zweiten Schritt müssen die Ergebnisse manuell geprüft und um fehlende Informationen ergänzt werden.</li>
           <li>Zuletzt kann die Ergebnisliste als XLSX oder CSV exportiert werden.</li>
         </ol>
-      </p>
     </div>
 
     <div class="map-content grey-bg pb-6" id="timelapse-map-wrapper">
@@ -61,6 +61,21 @@
         <div id="example-table">
         </div>
       </div>
+      <div class="section pt-6">
+      <p class="pb-3">
+        Dieses Tool dient der Identifikation von Datensätzen aus dem Berliner Datenportal zur Übernahme in die Berliner Geodateninfrastruktur.
+      Die automatische Abfrage kann nur eine erste Annäherung sein. Die Ergebnisse sollten sorgfältig geprüft und fehlende Informationen ergänzt werden:
+      </p>
+      <ul class="pb-3">
+        <li>Wurden Datensätze fälschlicherweise als Geodaten identifiziert?</li>
+        <li>Wurde die geographische Verfügbarkeit des Datensatzes (soweit vorhanden) korrekt identifiziert? Welche geographische Verfügbarkeit weisen Datensätze mit fehlenden Angaben auf?
+        <li>Welchen Raumbezug weisen die Datensätze auf?</li>
+        <li>Welche Maßnahmen sind nötig um die Datensätze in Geodatensätze zu überführen? Für Datensätze, die bereits in einem Geodatenformat vorliegen, ist keine Maßnahme nötig (na, not applicable).</li>
+        <li>Wie sollten die Datensätze priorisiert werden?</li>
+    </ul>
+    <p>Die betreffenden Informationen können direkt in der Tabelle bearbeitet werden.
+</p>
+</div>
     </div>
 
     <div class="section pb-6 pt-6" >
@@ -345,7 +360,7 @@
               var table = new Tabulator("#example-table", {
                 data:tabledata,           //load row data from array
                 layout:"fitColumns",      //fit columns to width of table
-                responsiveLayout:"hide",  //hide columns that dont fit on the table
+                //responsiveLayout:"hide",  //hide columns that dont fit on the table
                 //tooltips:true,            //show tool tips on cells
                 addRowPos:"top",          //when adding a new row, add it to the top of the table
                 history:true,             //allow undo and redo actions on the table
@@ -374,7 +389,8 @@
                     {title:"geographische Verfügbarkeit", field:"geographische Verfügbarkeit", editor:"input", headerMenu:headerMenu},
                     {title:"Raumbezug", field:"Raumbezug", editor:"input", headerMenu:headerMenu},
                     {title:"notwendige Maßnahme zur Geoformatierung", field:"notwendige Maßnahme zur Geoformatierung", editor:"input", headerMenu:headerMenu},
-                    {title:"Priorisierung", field:"Priorisierung", editor:"input", headerMenu:headerMenu},
+                    {title:"Priorisierung", field:"Priorisierung", formatter:"star", editor:true, formatterParams:{stars:4}, hozAlign:"center"},
+                    {title:"Notizen", field:"Notizen", editor:"input", headerMenu:headerMenu}
                 ],
               });
               // table.on("tableBuilt", () => {

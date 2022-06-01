@@ -110,7 +110,10 @@ def enrich_data(filtered_df):
 
 
     #add empty column Priorisierung
-    filtered_df['Priorisierung'] = ''
+    filtered_df['Priorisierung'] = 2
+
+    #add empty column Notes
+    filtered_df['Notizen'] = ''
 
     return filtered_df
 
