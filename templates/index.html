@@ -61,32 +61,23 @@
         <div id="example-table">
         </div>
       </div>
-      <div class="section pt-6">
-      <p class="pb-3">
-        Dieses Tool dient der Identifikation von Datensätzen aus dem Berliner Datenportal zur Übernahme in die Berliner Geodateninfrastruktur.
-      Die automatische Abfrage kann nur eine erste Annäherung sein. Die Ergebnisse sollten sorgfältig geprüft und fehlende Informationen ergänzt werden:
-      </p>
-      <ul class="pb-3">
-        <li>Wurden Datensätze fälschlicherweise als Geodaten identifiziert?</li>
-        <li>Wurde die geographische Verfügbarkeit des Datensatzes (soweit vorhanden) korrekt identifiziert? Welche geographische Verfügbarkeit weisen Datensätze mit fehlenden Angaben auf?
-        <li>Welchen Raumbezug weisen die Datensätze auf?</li>
-        <li>Welche Maßnahmen sind nötig um die Datensätze in Geodatensätze zu überführen? Für Datensätze, die bereits in einem Geodatenformat vorliegen, ist keine Maßnahme nötig (na, not applicable).</li>
-        <li>Wie sollten die Datensätze priorisiert werden?</li>
-    </ul>
-    <p>Die betreffenden Informationen können direkt in der Tabelle bearbeitet werden.
-</p>
-</div>
     </div>
 
     <div class="section pb-6 pt-6" >
       <h2 class='headline-02 pt-6 mb-1'>Erläuterungen zum Tool</h2>
-      <p class="headline-04">
-        Hier kommt eine Erläuterung hin.
-      </p>
-      <p class="headline-04">
-        Bei diesem Tool handelt es sich um einen Prototypen für einen Testbetrieb, der bei Bedarf weiterentwickelt werden kann.
-        Bei Fragen und Feedback wenden Sie sich bitte an <a href="mailto:odis@ts.berlin">odis@ts.berlin.</a> Der Quellcode ist <a href="https://github.com/technologiestiftung/xml-schema-validator-for-berlins-geodata" target="blank">auf GitHub verfügbar</a>.
-      </p>
+        <p class="pb-3">
+          Dieses Tool dient der Identifikation von Datensätzen aus dem Berliner Datenportal zur Übernahme in die Berliner Geodateninfrastruktur.
+        Die automatische Abfrage kann nur eine erste Annäherung sein. Die Ergebnisse sollten sorgfältig geprüft und fehlende Informationen ergänzt werden:
+        </p>
+        <ul class="pb-3">
+          <li>Wurden Datensätze fälschlicherweise als Geodaten identifiziert?</li>
+          <li>Wurde die geographische Verfügbarkeit des Datensatzes (soweit vorhanden) korrekt identifiziert? Welche geographische Verfügbarkeit weisen Datensätze mit fehlenden Angaben auf?
+          <li>Welchen Raumbezug weisen die Datensätze auf?</li>
+          <li>Welche Maßnahmen sind nötig um die Datensätze in Geodatensätze zu überführen? Für Datensätze, die bereits in einem Geodatenformat vorliegen, ist keine Maßnahme nötig (na, not applicable).</li>
+          <li>Wie sollten die Datensätze priorisiert werden?</li>
+        </ul>
+        <p>Die betreffenden Informationen können direkt in der Tabelle bearbeitet werden.
+        </p>
     </div>
     
     <div class="section-wrapper white">
@@ -227,6 +218,50 @@
     </div>
     
     <script>
+      var tabledata_sample = [{'Titel': ' ', 'Beschreibung': ' ', 'Herausgeber:in': ' ', 'Kontakt': ' ', 'Link zu einer Ressource': ' ', 'Geoformat': ' ', 'Link zu Datensatzeintrag': '', 'geographische Verfügbarkeit': ' ', 'Raumbezug': '', 'notwendige Maßnahme zur Geoformatierung': '', 'Priorisierung': '', 'Notizen': ''}];
+              // if (target instanceof HTMLElement) {
+              //   target.innerHTML = "";
+              //   // const br = document.createElement("br");
+              //   const report_status = document.createElement("p");
+              //   report_status.textContent = json.owner_org;
+              //   target.appendChild(report_status);
+              // }
+              var table = new Tabulator("#example-table", {
+                data:tabledata_sample,           //load row data from array
+                layout:"fitColumns",      //fit columns to width of table
+                //responsiveLayout:"hide",  //hide columns that dont fit on the table
+                //tooltips:true,            //show tool tips on cells
+                addRowPos:"top",          //when adding a new row, add it to the top of the table
+                history:true,             //allow undo and redo actions on the table
+                pagination:"local",       //paginate the data
+                paginationSize:20,         //allow 7 rows per page of data
+                paginationCounter:"rows", //display count of paginated rows in footer
+                movableColumns:true,      //allow column order to be changed
+                //rowClickPopup:rowPopupFormatter,
+                // initialSort:[             //set the initial sort order of the data
+                //   {column:"date", dir:"desc"},
+                // ],
+                columns:[                 //define the table columns
+                    {title:"Titel", field:"Titel", headerMenu:headerMenu, headerPopup:headerPopupFormatter, headerPopupIcon:"<i class='fas fa-filter' title='Spalte filtern'></i>", headerFilter:emptyHeaderFilter, headerFilterFunc:"like", clickPopup:rowPopupFormatter},
+                    //{title:"Beschreibung", field:"Beschreibung", headerMenu:headerMenu},
+                    {title:"Herausgeber:in", field:"Herausgeber:in", editor:"input", headerMenu:headerMenu},
+                    {title:"Kontakt", field:"Kontakt", editor:"input", headerMenu:headerMenu},
+                   // {title:"Formate", field:"formats", editor:"input", headerMenu:headerMenu},
+                    {title:"Geoformat", field:"Geoformat", editor:"input", headerMenu:headerMenu},
+                    {title:"Link zu einer Ressource", field:"Link zu einer Ressource", formatter:"link", headerMenu:headerMenu, formatterParams:{
+                        urlPrefix:"https://",
+                        target:"_blank",
+                    }},
+                    {title:"Link zu Datensatzeintrag", field:"Link zu Datensatzeintrag", formatter:"link", headerMenu:headerMenu,formatterParams:{
+                        target:"_blank",
+                    }},
+                    {title:"geographische Verfügbarkeit", field:"geographische Verfügbarkeit", editor:"input", headerMenu:headerMenu},
+                    {title:"Raumbezug", field:"Raumbezug", editor:"input", headerMenu:headerMenu},
+                    {title:"notwendige Maßnahme zur Geoformatierung", field:"notwendige Maßnahme zur Geoformatierung", editor:"input", headerMenu:headerMenu},
+                    {title:"Priorisierung", field:"Priorisierung", formatter:"star", editor:true, formatterParams:{stars:4}, hozAlign:"center"},
+                    {title:"Notizen", field:"Notizen", editor:"input", headerMenu:headerMenu}
+                ],
+              });
 
       // define header menu for the table
       var headerMenu = function(){
@@ -369,9 +404,9 @@
                 paginationCounter:"rows", //display count of paginated rows in footer
                 movableColumns:true,      //allow column order to be changed
                 //rowClickPopup:rowPopupFormatter,
-                initialSort:[             //set the initial sort order of the data
-                  {column:"date", dir:"desc"},
-                ],
+                // initialSort:[             //set the initial sort order of the data
+                //   {column:"date", dir:"desc"},
+                // ],
                 columns:[                 //define the table columns
                     {title:"Titel", field:"Titel", headerMenu:headerMenu, headerPopup:headerPopupFormatter, headerPopupIcon:"<i class='fas fa-filter' title='Spalte filtern'></i>", headerFilter:emptyHeaderFilter, headerFilterFunc:"like", clickPopup:rowPopupFormatter},
                     //{title:"Beschreibung", field:"Beschreibung", headerMenu:headerMenu},
