@@ -56,6 +56,7 @@
             min="2013-01-01">
             <br><br>
             <button class="button-primary" type="submit">Datenportal abfragen</button>
+            <p id="status">Lädt...</p>
           </form>
           <!-- <h4 class="bold pt-1">Ergebnis:</h4> -->
           <!-- <iframe class="iframestyle" id="result-iframe" name="formDestination"></iframe> -->
@@ -384,6 +385,8 @@
             })
             .then((response) => {
               if (!response.ok) {
+                const status = document.querySelector("#status");
+                status.textContent = 'Beim Abfragen des Datenportal ist etwas schief gegangen. Eventuell ist das Portal offline.';
                 // throw error
                 // give warning
                 // do something
