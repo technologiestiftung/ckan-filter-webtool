@@ -4,3 +4,4 @@ gunicorn
 waitress
 requests
 pandas
+pytest
