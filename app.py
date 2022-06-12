@@ -15,19 +15,24 @@ def api():
     if request.method == 'GET':
         return 'GET'
     elif request.method == 'POST':
-        try:
-            schema_name = request.form['schemas']
-            dataset_json = fetch_data('2022-05-01','NOW')
-            dataset_df = extract_columns(dataset_json)
-            filtered_df = filter_data(dataset_df)
-            enriched_data = enrich_data(filtered_df)
-            final_json = transform_to_json(enriched_data)
 
+        start_date = request.form['start_date']
+        end_date = request.form['end_date']
+
+        try:
+            datasets_list = fetch_data(start_date, end_date)
         except:
-            final_json = {"status": "error",
-                       "message": 'Error'}
+            return Response(status=400, mimetype='application/json')
+
+        dataset_df = extract_columns(datasets_list)
+        filtered_df = filter_data(dataset_df)
+        enriched_data = enrich_data(filtered_df)
+        final_json = transform_to_json(enriched_data)
         payload = json.dumps(final_json)
+
         return Response(payload, status=201, mimetype='application/json')
+
+    
 
 
 if __name__ == "__main__":

@@ -1,51 +1,49 @@
 import requests
 import json
 import pandas as pd
-import time
 import numpy as np
 
 def fetch_data(start_date, end_date):
-    datasets_json= []
-   # start_date = '2022-01-01'
-   # end_date = 'NOW'
+
+    datasets_list= []
     time_interval = '[' + start_date + ' TO ' + end_date + ']'
 
     for i in [0,1000,2000,3000]:
         endpoint_packages = 'https://datenregister.berlin.de/api/action/package_search?q=date_released:' + time_interval + ' OR date_updated:' + time_interval + '&rows=1000&start=' + str(i)
-        
         # make the http request get
-        packages_information = requests.get(endpoint_packages)
+        response = requests.get(endpoint_packages)
 
         #use the json module to load CKAN's response into dictionary
-        packages_dict = json.loads(packages_information.content)
+        packages_dict = json.loads(response.content)
         
-        datasets_json.extend(packages_dict['result']['results'])
+        datasets_list.extend(packages_dict['result']['results'])
+    #print(datasets_list)
+    return datasets_list
+    
 
-        return datasets_json
-
-def extract_columns(datasets_json):
+def extract_columns(datasets_list):
     #extract titles, ids, notes, authors, source, date, contact, resource link
     titles, ids, notes, author, source, contact, resource = [], [], [], [], [], [], []
-    for i in range(0, len(datasets_json)):
-        titles.append(datasets_json[i]['title'])
-        ids.append(datasets_json[i]['id'])
-        notes.append(datasets_json[i]['notes'])
-        author.append(datasets_json[i]['author'])
-        source.append(datasets_json[i]['berlin_source'])
-        contact.append(datasets_json[i]['maintainer_email'])
-        for j in range(0,datasets_json[i]['num_resources']):  #get url of first resource that is not html
-            if datasets_json[i]['resources'][j]['format'] != 'HTML' and datasets_json[i]['resources'][j]['url'] != '':
-                resource.append(datasets_json[i]['resources'][j]['url'])
+    for i in range(0, len(datasets_list)):
+        titles.append(datasets_list[i]['title'])
+        ids.append(datasets_list[i]['id'])
+        notes.append(datasets_list[i]['notes'])
+        author.append(datasets_list[i]['author'])
+        source.append(datasets_list[i]['berlin_source'])
+        contact.append(datasets_list[i]['maintainer_email'])
+        for j in range(0,datasets_list[i]['num_resources']):  #get url of first resource that is not html
+            if datasets_list[i]['resources'][j]['format'] != 'HTML' and datasets_list[i]['resources'][j]['url'] != '':
+                resource.append(datasets_list[i]['resources'][j]['url'])
                 break
 
     #extract formats as lists in dicts with dataset id
     formats = {}
-    for i in range(0, len(datasets_json)):
-        id = datasets_json[i]['id']
+    for i in range(0, len(datasets_list)):
+        id = datasets_list[i]['id']
         formats_per_id = []
-        for j in range (0,datasets_json[i]['num_resources']):
+        for j in range (0,datasets_list[i]['num_resources']):
             try:
-                formats_per_id.append(datasets_json[i]['resources'][j]['format'])
+                formats_per_id.append(datasets_list[i]['resources'][j]['format'])
             except: #if format is missing
                 pass
         formats[id] = formats_per_id
@@ -99,18 +97,20 @@ def enrich_data(filtered_df):
     filtered_df
 
     #automatically fill in values for geographische Verfügbarkeit
-    filtered_df.loc[filtered_df['Herausgeber:in'].str.contains('senatsverwaltung|senatskanzlei|lageso|amt für statistik', case=False), 'geographische Verfügbarkeit'] = 'landesweit'
-    filtered_df.loc[filtered_df['Herausgeber:in'].str.contains('bezirk', case=False), 'geographische Verfügbarkeit'] = 'Bezirk'
+    #filtered_df.loc[filtered_df['Herausgeber:in'].str.contains('senatsverwaltung|senatskanzlei|lageso|amt|landesamt', case=False), 'geographische Verfügbarkeit'] = 'landesweit'
+    filtered_df.loc[~filtered_df['Herausgeber:in'].str.contains('bezirk|steglitz-zehlendorf|marzahn-hellersdorf|treptow-köpenick|neukölln|pankow|mitte|lichtenberg|spandau|reinickendorf|tempelhof-schöneberg|charlottenburg-wilmersdorf|friedrichshain-kreuzberg', case=False), 'geographische Verfügbarkeit'] = 'landesweit'
+    filtered_df.loc[filtered_df['Herausgeber:in'].str.contains('bezirk|steglitz-zehlendorf|marzahn-hellersdorf|treptow-köpenick|neukölln|pankow|mitte|lichtenberg|spandau|reinickendorf|tempelhof-schöneberg|charlottenburg-wilmersdorf|friedrichshain-kreuzberg', case=False), 'geographische Verfügbarkeit'] = 'Bezirk'
+    filtered_df.loc[filtered_df['Titel'].str.contains('steglitz-zehlendorf|marzahn-hellersdorf|treptow-köpenick|neukölln|pankow|mitte|lichtenberg|spandau|reinickendorf|tempelhof-schöneberg|charlottenburg-wilmersdorf|friedrichshain-kreuzberg', case=False), 'geographische Verfügbarkeit'] = 'Bezirk'
 
     #add empty column Raumbezug
     filtered_df['Raumbezug'] = ''
 
     #automatically fill in Maßnahme
-    filtered_df.loc[filtered_df['Geoformat']==True, 'notwendige Maßnahme zur Geoformatierung'] = 'na'
+    filtered_df.loc[filtered_df['Geoformat']==True, 'notwendige Maßnahme zur Geoformatierung'] = 'keine notwendig'
 
 
     #add empty column Priorisierung
-    filtered_df['Priorisierung'] = 2
+    filtered_df['Priorisierung'] = 0
 
     #add empty column Notes
     filtered_df['Notizen'] = ''
@@ -123,6 +123,5 @@ def transform_to_json(enriched_df):
     
     result = enriched_df.to_json(orient="records")
     parsed = json.loads(result)
-    print(parsed)
 
     return parsed
