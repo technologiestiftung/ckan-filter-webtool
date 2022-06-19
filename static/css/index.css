@@ -201,10 +201,11 @@ svg.logo-opendata:hover path {
   
 
 .footer-links{
-  color: white;
+  color: rgb(0, 0, 0);
   text-decoration: none;
   font-size: 12px !important;
   align-items: center;
+  font-weight: bolder;
 }
 
 .footer-links:hover{
@@ -386,7 +387,7 @@ p,ol,ul {
   display: flex;  
   justify-content: center;
   height: 5em;
-  background: #213A8F;
+  background: #91c882d2;
 }
 
 
@@ -506,7 +507,7 @@ p.copy {
     padding-top: 3rem; }
 
 .pt-6 {
-  padding-top: 2rem; }
+  padding-top: 1.5rem; }
 
   .pt-12 {
     padding-top: 6rem; }
@@ -520,6 +521,9 @@ p.copy {
 
 .pb-6 {
   padding-bottom: 1.5rem; 
+}
+.pb-10 {
+  padding-bottom: 6rem; 
 }
 .bl {
     padding-top: 3rem;
@@ -590,7 +594,7 @@ p.copy {
 
 @media screen and (min-width: 64rem) {
   .section {
-    max-width: 50rem;
+    max-width: 80rem;
     width: 85%; }
 
   .section.flex-wrapper {
@@ -1031,6 +1035,10 @@ path:hover{
   background: #efefef;
 }
 
+.green-bg {
+  background: #91c882d2;
+}
+
 #navigation ul,
 #navigation li{
   overflow: auto;
@@ -1076,7 +1084,7 @@ path:hover{
 ul#sub-navigation li.active{
   color: white;
   background: #213A8F;
-  border-color: #213A8F;
+  border-color: c;
   opacity: 1;
   transition: all .25s ease;
 }
@@ -1284,6 +1292,8 @@ input{
   display: block;
   width: 150px;
   margin-top: 2em;
+  font: inherit;
+  font-size: 14px;
 }
 
 
@@ -1401,3 +1411,23 @@ a.blog-link:hover {
   border:1px solid #999999;
   margin-top:1em;
 }
+
+#download-section{
+  margin-top: 1em;
+  float: right;
+}
+
+.download-button{
+  transition: background 0.1s;
+  background: #91c882d2;
+  font-family: 'Clan Book', sans-serif;
+  font-size: 14px;
+  padding: .5rem .75rem;
+  border-radius: 5px;
+  /* color: white; */
+  border: 0px solid; }
+  .download-button:focus {
+    outline: 0; }
+  .download-button:hover {
+    background: #5b8350d2;
+    transition: background 0.1s; }

@@ -43,10 +43,13 @@
     <div class="section pb-2 pt-6">
       <p class="headline-05">Ein Tool der Open Data Informationsstelle (ODIS)
       </p>
-      <h1 id="title">Geodaten-Abfrage der CKAN-API</h1>
+      <h1 id="title">Geodaten im Berliner Open Data Portal</h1>
       <p class="headline-02" id="intro-text">
-        Dieses Tool dient der Identifikation von Datensätzen aus dem Berliner Datenportal zur Übernahme in die Berliner Geodateninfrastruktur.
+        Dieses Tool dient der Identifikation von Datensätzen mit räumlichem Bezug aus dem Berliner Datenportal
       </p>
+    </div>
+      <div class="map-content green-bg pb-6">
+        <div class="section pt-6">
       <p>
         Die Anwendung funktioniert in drei Schritten.
       </p>
@@ -55,19 +58,21 @@
           <li>Im zweiten Schritt müssen die Ergebnisse manuell geprüft und um fehlende Informationen ergänzt werden.</li>
           <li>Zuletzt kann die Ergebnisliste als XLSX oder CSV exportiert werden.</li>
         </ol>
-    </div>
+        </div>
+      </div>
+    
 
-    <div class="map-content grey-bg pb-6" id="timelapse-map-wrapper">
+    <div class="map-content pb-10" id="timelapse-map-wrapper">
       <div class="section pt-6">
         <div class="flex-wrapper col">
           <form action="/api" method="post" enctype="multipart/form-data" target="formDestination" id="form" class="form__validate">
             <h4 class="bold headline-04 pb-2">Für welchen Zeitraum möchtest du Metadaten abfragen?</h4>
-            <label style="padding-right: 1rem;" for="start_date">Von</label>
-            <input style="display:inline; width:80px;" type="date" id="start_date" name="start_date"
+            <label style="padding-right: 0.25rem;" for="start_date">Von</label>
+            <input style="display:inline; width:100px; background-color: #e6e6e6;" type="date" id="start_date" name="start_date"
             value="2022-01-01"
             min="2013-01-01">
-            <label style="padding-right: 1rem;" for="end_date">bis</label>
-            <input style="display:inline; width:80px;" type="date" id="end_date" name="end_date"
+            <label style="padding-left: 2em; padding-right: 0.25rem;" for="end_date">bis</label>
+            <input style="display:inline; width:100px; background-color: #e6e6e6;" type="date" id="end_date" name="end_date"
             min="2013-01-01">
             <div class="pt-1">
             <button class="button-primary" type="submit" style="display:inline;">Datenportal abfragen</button>
@@ -89,6 +94,7 @@
       </div>
     </div>
 
+    <div class="map-content grey-bg pb-6 mt">
     <div class="section pb-6 pt-6" >
       <h2 class='headline-02 pt-6 mb-1'>Erläuterungen zum Tool</h2>
         <p class="pb-3">
@@ -105,10 +111,11 @@
         <p>Die betreffenden Informationen können direkt in der Tabelle bearbeitet werden.
         </p>
     </div>
+    </div>
     
     <div class="section-wrapper white">
-        <div class="section pt-5 pb-5">
-          <p class="headline-05"> ODIS wird von der Senatsverwaltung für Wirtschaft, Energie und Betriebe und der Investitionsbank Berlin aus den Mitteln des Landes Berlin gefördert. Das Tool wurde im Rahmen eines Projekts mit der Senatsverwaltung für Stadtentwicklung, Bauen und Wohnen entwickelt.
+        <div class="section pt-6 pb-6">
+          <p class="headline-05 pt-6"> ODIS wird von der Senatsverwaltung für Wirtschaft, Energie und Betriebe und der Investitionsbank Berlin aus den Mitteln des Landes Berlin gefördert. Das Tool wurde im Rahmen eines Projekts mit der Senatsverwaltung für Stadtentwicklung, Bauen und Wohnen entwickelt.
           </p>
           <div class="credentials">
             <a href="https://www.technologiestiftung-berlin.de">
