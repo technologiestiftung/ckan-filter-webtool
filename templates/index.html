@@ -382,6 +382,8 @@
           event.preventDefault();
           if (form instanceof HTMLFormElement) {
             const formData = new FormData(form);
+            const end_date = formData.get("end_date")
+            const start_date = formData.get("start_date")
             
             fetch(form.action, {
               method: "POST",
@@ -428,9 +430,6 @@
                 // ],
                 columns: table_columns,
               });
-              // table.on("tableBuilt", () => {
-              //   table.download("csv", "data.csv");
-              // });
 
               //trigger download of data.csv file
               document.getElementById("download-csv").addEventListener("click", function(){
