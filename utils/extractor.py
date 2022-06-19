@@ -61,10 +61,23 @@ def extract_columns(datasets_list):
 
     #join with formats_df
     datasets_df = pd.merge(datasets_df, formats_df, on='id', how="outer")
+
+    datasets_df['Geoformat'] = ""
+
     # check formats for geodata formats
-    geoformats = 'wms|wfs|geo|shp|shape|gjson|kml|kmz|gtfs|gpx'
-    # if a geoformat is included, add 'true' in new column 'geoformat'
-    datasets_df['Geoformat'] = pd.Series(datasets_df['formats'].str.contains(geoformats, case=False))
+    geoformats = ["wms","wfs","geojson","geo","shp","shape","gjson","kml","kmz","gtfs","gpx"]
+    # if a geoformat is included, name them in new column 'geoformat'
+    for index, row in datasets_df.iterrows(): #iterate through rows
+        existing_geoformats = "" #empty string for existing geoformats
+        for f in geoformats: #iterate through geoformats list
+            if f in datasets_df.loc[index, 'formats'].lower():
+                if existing_geoformats == "": #when it's the first one
+                    existing_geoformats = str(f)
+                else:
+                    existing_geoformats = str(existing_geoformats) +", " + str(f)
+        if existing_geoformats == "":
+            existing_geoformats = "-"
+        datasets_df.loc[index,'Geoformat'] = existing_geoformats
 
     return datasets_df
 
