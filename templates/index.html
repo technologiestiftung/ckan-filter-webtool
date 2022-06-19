@@ -55,9 +55,10 @@
             <label style="padding-right: 1rem;" for="end_date">bis</label>
             <input style="display:inline; width:80px;" type="date" id="end_date" name="end_date"
             min="2013-01-01">
-            <br><br>
-            <button class="button-primary" type="submit">Datenportal abfragen</button>
-            <p id="status">Lädt...</p>
+            <div class="pt-1">
+            <button class="button-primary" type="submit" style="display:inline;">Datenportal abfragen</button>
+            <p style="display:inline; padding-left:1rem" id="status"></p>
+            </div>
           </form>
           <!-- <h4 class="bold pt-1">Ergebnis:</h4> -->
           <!-- <iframe class="iframestyle" id="result-iframe" name="formDestination"></iframe> -->
@@ -379,6 +380,8 @@
         }
 
         form.addEventListener("submit", (event) => {
+          const status = document.querySelector("#status");
+              status.textContent = 'Abfrage läuft ...';
           event.preventDefault();
           if (form instanceof HTMLFormElement) {
             const formData = new FormData(form);
@@ -404,6 +407,9 @@
               return response.json();
             })
             .then((json) => {
+              const status = document.querySelector("#status");
+              status.textContent = Object.keys(json).length + ' Datensätze gefunden';
+
               console.log(json);
               var tabledata = json;
               // if (target instanceof HTMLElement) {
