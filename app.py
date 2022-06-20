@@ -22,12 +22,21 @@ def api():
         tags_include = request.form['tags_include']
 
         try:
+            fisbroker_check = request.form['fisbroker']
+        except:
+            fisbroker_check = False
+        try:
+            gsi_check = request.form['gsi']
+        except:
+            gsi_check = False
+
+        try:
             datasets_list = fetch_data(start_date, end_date)
         except:
             return Response(status=400, mimetype='application/json')
 
         dataset_df = extract_columns(datasets_list)
-        filtered_df = filter_data(dataset_df, tags_include)
+        filtered_df = filter_data(dataset_df, tags_include, fisbroker_check, gsi_check)
         enriched_data = enrich_data(filtered_df)
         final_json = transform_to_json(enriched_data)
         payload = json.dumps(final_json)

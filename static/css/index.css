@@ -1282,8 +1282,8 @@ ul#main-navigation li.active {
 } */
 
 input{
-  display: block;
-  width: 150px;
+  /* display: block;
+  width: 150px; */
   margin-top: 2em;
   font: inherit;
   font-size: 14px;

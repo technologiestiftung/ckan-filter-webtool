@@ -88,9 +88,14 @@ def extract_columns(datasets_list):
 
     return datasets_df
 
-def filter_data(datasets_df, tags_include):
+def filter_data(datasets_df, tags_include, fisbroker_check, gsi_check):
     #filter for datasets not from fisbroker
-    datasets_df = datasets_df[datasets_df['source'].str.contains('fisbroker', case=False) == False]
+    if fisbroker_check == False:
+        datasets_df = datasets_df[datasets_df['source'].str.contains('fisbroker', case=False) == False]
+    
+    #filter for datasets not from gsi
+    if gsi_check == False:
+        datasets_df = datasets_df[datasets_df['source'].str.contains('gsi', case=False) == False]
 
     #filter for potential geodata with keywords
     # define keywords to include datasets

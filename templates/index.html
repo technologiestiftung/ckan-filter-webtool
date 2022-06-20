@@ -51,12 +51,12 @@
       <div class="map-content green-bg pb-6">
         <div class="section pt-6">
       <p>
-        Die Anwendung funktioniert in drei Schritten.
+        Die Anwendung wird in drei Schritten bedient.
       </p>
         <ol>
-          <li>Zunächst werden auf Basis einer Abfrage des Datenregisters über die CKAN-API jene Datensätze herausgefiltert, welche noch nicht in der Geodateninfrastruktur Berlins enthalten sind und potenziell Geodaten sein könnten. Dafür wird in Titel und Beschreibung des Metadateneintrags nach verschiedenen Stichwörtern gesucht.</li>
-          <li>Im zweiten Schritt müssen die Ergebnisse manuell geprüft und um fehlende Informationen ergänzt werden.</li>
-          <li>Zuletzt kann die Ergebnisliste als XLSX oder CSV exportiert werden.</li>
+          <li>Zunächst werden anhand einer Abfrage des Datenregisters über die CKAN-API alle potentiell relevanten (Geo-)Datensätze herausgefiltert. Dafür werden die Metadaten nach verschiedenen Stichwörtern für einen bestimmten Zeitraum veröffentlicht oder aktualisert wurden gesucht.</li>
+          <li>Im zweiten Schritt sollten die tabellarisch angezeigten Ergebnisse manuell geprüft und um fehlende Informationen ergänzt werden. Die Tabelle ist filter und editierbar. Durch die Spalte zur Priorisierung können die Ergebnisse ausserdem direkt manuell bewertet werden.</li>
+          <li>Zuletzt kann die Ergebnisliste als XLSX, CSV oder JSON-Datei für den weiteren Gebrauch und zum Teilen exportiert werden.</li>
         </ol>
         </div>
       </div>
@@ -66,7 +66,7 @@
       <div class="section pt-6">
         <div class="flex-wrapper col">
           <form action="/api" method="post" enctype="multipart/form-data" target="formDestination" id="form" class="form__validate">
-            <h4 class="bold headline-04 pb-2">Für welchen Zeitraum möchtest du Metadaten abfragen?</h4>
+            <h4 class="bold pb-2">Für welchen Zeitraum möchtest du Metadaten abfragen?</h4>
             <label style="padding-right: 0.25rem;" for="start_date">Von</label>
             <input style="display:inline; width:100px; background-color: #e6e6e6;" type="date" id="start_date" name="start_date"
             value="2022-01-01"
@@ -76,11 +76,19 @@
             min="2013-01-01">
 
             <details>
-              <summary class="pt-1">Erweiterte Sucheinstellungen</summary>
+              <summary class="pt-6">Erweiterte Sucheinstellungen</summary>
               <br>
-              <label style="font-weight: bold;" for="tags_include">Filtere nach Datensätzen die mindestens eine dieser Zeichenfolgen enthalten (nicht case sensitive):</label><br>
+              <h4 class="bold pt-6 pb-2">Nach welchen Stichworten möchtest du Datensätze filtern?</h4>
+              <p>Datensätze werden angezeigt wenn Titel oder Beschreibung mindestens eine dieser Zeichenkombinationen enthalten (auch Teilwörter, kommagetrennt, nicht case sensitive).</p>
               <textarea style="height:7em; margin-top: 0.5em;" type="text" id="tags_include" name="tags_include">bezirk, ortsteil, planungsraum, prognoseraum, bezirksregion, lor, quartier, kiez, stadtteil, bezirksgrenze, postleitzahl, wahlkreis, wahlbezirk, zelle, block, fläche, gebiet, grundstück, gewässer, straße, flur, weg, linie, route, fluss, gebäude, liegenschaft, standort, station, einrichtung, stätte, spot, adress, platz, stelle, wahllokal, zentrum, bau
               </textarea>
+              <div class="pt-6">
+                <h4 class="bold pb-2">Möchtest du Datensätze aus dem FIS-Broker und dem Gesundheits- und Sozialinformationssystem mit einbeziehen?</h4>
+                <input type="checkbox" id="fisbroker" name="fisbroker">
+                <label for="fisbroker">FIS-Broker abfragen</label>
+                <input style="margin-left:2rem;" type="checkbox" id="gsi" name="gsi">
+                <label for="gsi">GSI abfragen</label>
+              </div>
             </details>
             <br>
 
@@ -261,6 +269,7 @@
     </div>
     
     <script>
+    // get todays date for input calender
     var todays_date = new Date().toISOString().substring(0, 10);
     document.getElementById('start_date').max = todays_date
     document.getElementById('end_date').value = todays_date
@@ -286,7 +295,7 @@
                     {title:"Notizen", field:"Notizen", editor:"input", headerMenu:headerMenu}
                 ];
 
-      var tabledata_sample = [{'Titel': ' ', 'Beschreibung': ' ', 'Herausgeber:in': ' ', 'Kontakt': ' ', 'Link zu einer Ressource': ' ', 'Geoformat': ' ', 'Link zu Datensatzeintrag': '', 'geographische Verfügbarkeit': ' ', 'Raumbezug': '', 'notwendige Maßnahme zur Geoformatierung': '', 'Priorisierung': '', 'Notizen': ''}];
+    var tabledata_sample = [{'Titel': ' ', 'Beschreibung': ' ', 'Herausgeber:in': ' ', 'Kontakt': ' ', 'Link zu einer Ressource': ' ', 'Geoformat': ' ', 'Link zu Datensatzeintrag': '', 'geographische Verfügbarkeit': ' ', 'Raumbezug': '', 'notwendige Maßnahme zur Geoformatierung': '', 'Priorisierung': '', 'Notizen': ''}];
               // if (target instanceof HTMLElement) {
               //   target.innerHTML = "";
               //   // const br = document.createElement("br");
@@ -294,26 +303,27 @@
               //   report_status.textContent = json.owner_org;
               //   target.appendChild(report_status);
               // }
-              var table = new Tabulator("#example-table", {
-                data:tabledata_sample,           //load row data from array
-                layout:"fitColumns",      //fit columns to width of table
-                //responsiveLayout:"hide",  //hide columns that dont fit on the table
-                //tooltips:true,            //show tool tips on cells
-                addRowPos:"top",          //when adding a new row, add it to the top of the table
-                history:true,             //allow undo and redo actions on the table
-                pagination:"local",       //paginate the data
-                paginationSize:20,         //allow 7 rows per page of data
-                paginationCounter:"rows", //display count of paginated rows in footer
-                movableColumns:true,      //allow column order to be changed
-                //rowClickPopup:rowPopupFormatter,
-                // initialSort:[             //set the initial sort order of the data
-                //   {column:"date", dir:"desc"},
-                // ],
-                columns: table_columns,
-              });
+    var table = new Tabulator("#example-table", {
+      data:tabledata_sample,           //load row data from array
+      layout:"fitColumns",      //fit columns to width of table
+      //responsiveLayout:"hide",  //hide columns that dont fit on the table
+      //tooltips:true,            //show tool tips on cells
+      addRowPos:"top",          //when adding a new row, add it to the top of the table
+      history:true,             //allow undo and redo actions on the table
+      pagination:"local",       //paginate the data
+      paginationSize:20,         //allow 7 rows per page of data
+      paginationCounter:"rows", //display count of paginated rows in footer
+      movableColumns:true,      //allow column order to be changed
+      //rowClickPopup:rowPopupFormatter,
+      // initialSort:[             //set the initial sort order of the data
+      //   {column:"date", dir:"desc"},
+      // ],
+      columns: table_columns,
+    });
 
       // define header menu for the table
       var headerMenu = function(){
+      console.log("ballal2")
       var menu = [];
       var columns = this.getColumns();
       for(let column of columns){
@@ -418,7 +428,6 @@
             const formData = new FormData(form);
             const end_date = formData.get("end_date")
             const start_date = formData.get("start_date")
-            console.log(formData.get("tags_include"))
             
             fetch(form.action, {
               method: "POST",
