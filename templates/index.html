@@ -275,25 +275,104 @@
     document.getElementById('end_date').value = todays_date
     document.getElementById('end_date').max = todays_date
 
+      //create header popup contents
+      var headerPopupFormatter = function(e, column, onRendered){
+      var container = document.createElement("div");
+
+      var label = document.createElement("label");
+      label.innerHTML = "Spalte filtern:";
+      label.style.display = "block";
+      label.style.fontSize = ".7em";
+
+      var input = document.createElement("input");
+      input.placeholder = "Suchbegriff eingeben..";
+      input.value = column.getHeaderFilterValue() || "";
+
+      input.addEventListener("keyup", (e) => {
+          column.setHeaderFilterValue(input.value);
+      });
+
+      container.appendChild(label);
+      container.appendChild(input);
+
+      return container;
+    }
+
+    //create dummy header filter to allow popup to filter
+    var emptyHeaderFilter = function(){
+        return document.createElement("div");;
+    }
+
+
+    // define header menu for the table
+    var headerMenu = function(){
+    var menu = [];
+    var columns = this.getColumns();
+    for(let column of columns){
+      //create checkbox element using font awesome icons
+      let icon = document.createElement("i");
+      icon.classList.add("fas");
+      icon.classList.add(column.isVisible() ? "fa-check-square" : "fa-square");
+      //build label
+      let label = document.createElement("span");
+      let title = document.createElement("span");
+      title.textContent = " " + column.getDefinition().title;
+      label.appendChild(icon);
+      label.appendChild(title);
+      //create menu item
+      menu.push({
+        label:label,
+        action:function(e){
+            //prevent menu closing
+            e.stopPropagation();
+            //toggle current column visibility
+            column.toggle();
+            //change menu item icon
+            if(column.isVisible()){
+                icon.classList.remove("fa-square");
+                icon.classList.add("fa-check-square");
+            }else{
+                icon.classList.remove("fa-check-square");
+                icon.classList.add("fa-square");
+            }
+        }
+      });
+    }
+      return menu;
+    };
+
+    //create row popup contents
+    var rowPopupFormatter = function(e, row, onRendered){
+        var data = row.getData(),
+        container = document.createElement("div"),
+        contents = "<strong style='font-size:1.2em;'>" + data.Titel + "</strong><br/><ul style='padding:0;  margin-top:10px; margin-bottom:0;'>";
+        contents += "<li>" + data.Beschreibung + "</li>";
+        contents += "</ul>";
+
+        container.innerHTML = contents;
+
+        return container;
+    };
+    
     var table_columns = [                 //define the table columns
-                    {title:"Titel", field:"Titel", headerMenu:headerMenu, headerPopup:headerPopupFormatter, headerPopupIcon:"<i class='fas fa-filter' title='Spalte filtern'></i>", headerFilter:emptyHeaderFilter, headerFilterFunc:"like", clickPopup:rowPopupFormatter},
-                    //{title:"Beschreibung", field:"Beschreibung", headerMenu:headerMenu},
-                    {title:"Herausgeber:in", field:"Herausgeber:in", editor:"input", headerMenu:headerMenu},
-                   // {title:"Kontakt", field:"Kontakt", editor:"input", headerMenu:headerMenu},
-                   // {title:"Formate", field:"formats", editor:"input", headerMenu:headerMenu},
-                    {title:"Geoformat", field:"Geoformat", editor:"input", headerMenu:headerMenu},
-                    {title:"Link zur ersten Ressource", field:"Link zu einer Ressource", formatter:"link", headerMenu:headerMenu, formatterParams:{
-                        target:"_blank",
-                    }},
-                    {title:"Link zu Datensatzeintrag", field:"Link zu Datensatzeintrag", formatter:"link", headerMenu:headerMenu,formatterParams:{
-                        target:"_blank",
-                    }},
-                    {title:"geographische Verfügbarkeit", field:"geographische Verfügbarkeit", editor:"input", headerMenu:headerMenu},
-                    {title:"Raumbezug", field:"Raumbezug", editor:"input", headerMenu:headerMenu},
-                    {title:"notwendige Maßnahme zur Geoformatierung", field:"notwendige Maßnahme zur Geoformatierung", editor:"input", headerMenu:headerMenu},
-                    {title:"Priorisierung", field:"Priorisierung", formatter:"star", editor:true, formatterParams:{stars:4}, hozAlign:"center"},
-                    {title:"Notizen", field:"Notizen", editor:"input", headerMenu:headerMenu}
-                ];
+      {title:"Titel", field:"Titel", headerMenu:headerMenu, headerPopup:headerPopupFormatter, headerPopupIcon:"<i class='fas fa-filter' title='Spalte filtern'></i>", headerFilter:emptyHeaderFilter, headerFilterFunc:"like", clickPopup:rowPopupFormatter},
+      //{title:"Beschreibung", field:"Beschreibung", headerMenu:headerMenu},
+      {title:"Herausgeber:in", field:"Herausgeber:in", headerMenu:headerMenu, clickPopup:rowPopupFormatter},
+      // {title:"Kontakt", field:"Kontakt", editor:"input", headerMenu:headerMenu},
+      // {title:"Formate", field:"formats", editor:"input", headerMenu:headerMenu},
+      {title:"Geoformat", field:"Geoformat", headerMenu:headerMenu, clickPopup:rowPopupFormatter},
+      {title:"Link zur ersten Ressource", field:"Link zu einer Ressource", formatter:"link", headerMenu:headerMenu, formatterParams:{
+          target:"_blank",
+      }},
+      {title:"Link zu Datensatzeintrag", field:"Link zu Datensatzeintrag", formatter:"link", headerMenu:headerMenu,formatterParams:{
+          target:"_blank",
+      }},
+      {title:"geographische Verfügbarkeit", field:"geographische Verfügbarkeit", editor:"input", headerMenu:headerMenu},
+      {title:"Raumbezug", field:"Raumbezug", editor:"input", headerMenu:headerMenu},
+      {title:"notwendige Maßnahme zur Geoformatierung", field:"notwendige Maßnahme zur Geoformatierung", editor:"input", headerMenu:headerMenu},
+      {title:"Priorisierung", field:"Priorisierung", formatter:"star", editor:true, formatterParams:{stars:4}, hozAlign:"center"},
+      {title:"Notizen", field:"Notizen", editor:"input", headerMenu:headerMenu}
+    ];
 
     var tabledata_sample = [{'Titel': ' ', 'Beschreibung': ' ', 'Herausgeber:in': ' ', 'Kontakt': ' ', 'Link zu einer Ressource': ' ', 'Geoformat': ' ', 'Link zu Datensatzeintrag': '', 'geographische Verfügbarkeit': ' ', 'Raumbezug': '', 'notwendige Maßnahme zur Geoformatierung': '', 'Priorisierung': '', 'Notizen': ''}];
               // if (target instanceof HTMLElement) {
@@ -314,6 +393,7 @@
       paginationSize:20,         //allow 7 rows per page of data
       paginationCounter:"rows", //display count of paginated rows in footer
       movableColumns:true,      //allow column order to be changed
+      history:true, //record table history
       //rowClickPopup:rowPopupFormatter,
       // initialSort:[             //set the initial sort order of the data
       //   {column:"date", dir:"desc"},
@@ -321,205 +401,111 @@
       columns: table_columns,
     });
 
-      // define header menu for the table
-      var headerMenu = function(){
-      console.log("ballal2")
-      var menu = [];
-      var columns = this.getColumns();
-      for(let column of columns){
-          //create checkbox element using font awesome icons
-          let icon = document.createElement("i");
-          icon.classList.add("fas");
-          icon.classList.add(column.isVisible() ? "fa-check-square" : "fa-square");
-          //build label
-          let label = document.createElement("span");
-          let title = document.createElement("span");
-          title.textContent = " " + column.getDefinition().title;
-          label.appendChild(icon);
-          label.appendChild(title);
-          //create menu item
-          menu.push({
-              label:label,
-              action:function(e){
-                  //prevent menu closing
-                  e.stopPropagation();
-                  //toggle current column visibility
-                  column.toggle();
-                  //change menu item icon
-                  if(column.isVisible()){
-                      icon.classList.remove("fa-square");
-                      icon.classList.add("fa-check-square");
-                  }else{
-                      icon.classList.remove("fa-check-square");
-                      icon.classList.add("fa-square");
-                  }
-              }
-          });
+    // @ts-check
+    document.addEventListener("DOMContentLoaded", function () {
+      let fileContent = undefined;
+      const target = document.querySelector("#results");
+      if (!target) {
+        throw new Error("Could not find target div (#results) for results");
+      }
+      const resframe = document.querySelector("iframe#result-iframe");
+      if (resframe) {
+        if (resframe instanceof HTMLElement) {
+          resframe.style.display = "none";
         }
-        return menu;
-      };
-
-      //create row popup contents
-      var rowPopupFormatter = function(e, row, onRendered){
-          var data = row.getData(),
-          container = document.createElement("div"),
-          contents = "<strong style='font-size:1.2em;'>" + data.Titel + "</strong><br/><ul style='padding:0;  margin-top:10px; margin-bottom:0;'>";
-          contents += "<li>" + data.Beschreibung + "</li>";
-          contents += "</ul>";
-
-          container.innerHTML = contents;
-
-          return container;
-      };
-
-      //create header popup contents
-      var headerPopupFormatter = function(e, column, onRendered){
-          var container = document.createElement("div");
-
-          var label = document.createElement("label");
-          label.innerHTML = "Spalte filtern:";
-          label.style.display = "block";
-          label.style.fontSize = ".7em";
-
-          var input = document.createElement("input");
-          input.placeholder = "Suchbegriff eingeben..";
-          input.value = column.getHeaderFilterValue() || "";
-
-          input.addEventListener("keyup", (e) => {
-              column.setHeaderFilterValue(input.value);
-          });
-
-          container.appendChild(label);
-          container.appendChild(input);
-
-          return container;
+      }
+      const form = document.querySelector("#form");
+      if (!form) {
+        throw new Error("Could not find form element (#form)");
       }
 
-      //create dummy header filter to allow popup to filter
-      var emptyHeaderFilter = function(){
-          return document.createElement("div");;
-      }
-
-      // @ts-check
-      document.addEventListener("DOMContentLoaded", function () {
-        let fileContent = undefined;
-        const target = document.querySelector("#results");
-        if (!target) {
-          throw new Error("Could not find target div (#results) for results");
-        }
-      
-        const resframe = document.querySelector("iframe#result-iframe");
-        if (resframe) {
-          if (resframe instanceof HTMLElement) {
-            resframe.style.display = "none";
-          }
-        }
-      
-        const form = document.querySelector("#form");
-        if (!form) {
-          throw new Error("Could not find form element (#form)");
-        }
-
-        form.addEventListener("submit", (event) => {
-          const status = document.querySelector("#status");
-              status.textContent = 'Abfrage läuft ...';
-          event.preventDefault();
-          if (form instanceof HTMLFormElement) {
-            const formData = new FormData(form);
-            const end_date = formData.get("end_date")
-            const start_date = formData.get("start_date")
-            
-            fetch(form.action, {
-              method: "POST",
-              body: formData,
-              //mode: "cors",
-      
-            })
-            .then((response) => {
-              if (!response.ok) {
-                const status = document.querySelector("#status");
-                status.textContent = 'Beim Abfragen des Datenportal ist etwas schief gegangen. Eventuell ist das Portal offline.';
-                // throw error
-                // give warning
-                // do something
-                return;
-              }
-              //form.reset();
-              return response.json();
-            })
-            .then((json) => {
+      form.addEventListener("submit", (event) => {
+        const status = document.querySelector("#status");
+        status.textContent = 'Abfrage läuft ...';
+        event.preventDefault();
+        if (form instanceof HTMLFormElement) {
+          const formData = new FormData(form);
+          const end_date = formData.get("end_date")
+          const start_date = formData.get("start_date")
+          
+          fetch(form.action, {
+            method: "POST",
+            body: formData,
+            //mode: "cors",
+    
+          })
+          .then((response) => {
+            if (!response.ok) {
               const status = document.querySelector("#status");
-              status.textContent = Object.keys(json).length + ' Datensätze gefunden';
-
-              console.log(json);
-              var tabledata = json;
-              // if (target instanceof HTMLElement) {
-              //   target.innerHTML = "";
-              //   // const br = document.createElement("br");
-              //   const report_status = document.createElement("p");
-              //   report_status.textContent = json.owner_org;
-              //   target.appendChild(report_status);
-              // }
-              var table = new Tabulator("#example-table", {
-                data:tabledata,           //load row data from array
-                layout:"fitColumns",      //fit columns to width of table
-                //responsiveLayout:"hide",  //hide columns that dont fit on the table
-                //tooltips:true,            //show tool tips on cells
-                addRowPos:"top",          //when adding a new row, add it to the top of the table
-                history:true,             //allow undo and redo actions on the table
-                pagination:"local",       //paginate the data
-                paginationSize:20,         //allow 7 rows per page of data
-                paginationCounter:"rows", //display count of paginated rows in footer
-                movableColumns:true,      //allow column order to be changed
-                //rowClickPopup:rowPopupFormatter,
-                // initialSort:[             //set the initial sort order of the data
-                //   {column:"date", dir:"desc"},
-                // ],
-                columns: table_columns,
-              });
-
-              //trigger download of data.csv file
-              document.getElementById("download-csv").addEventListener("click", function(){
-                  table.download("csv", start_date + "_bis_" + end_date + "_CKAN_Abfrage.csv");
-              });
-
-              //trigger download of data.json file
-              document.getElementById("download-json").addEventListener("click", function(){
-                  table.download("json", start_date + "_bis_" + end_date + "_CKAN_Abfrage.json");
-              });
-
-              //trigger download of data.xlsx file
-              document.getElementById("download-xlsx").addEventListener("click", function(){
-                  table.download("xlsx", start_date + "_bis_" + end_date + "_CKAN_Abfrage.xlsx", {sheetName:start_date + " bis " + end_date});
-              });
-
-
-                  //     } else if (key === "report") {
-                  //       const reportKeys = Object.keys(json.report);
-                  //       for (const reportKey of reportKeys) {
-                  //         const report = json.report[reportKey];
-                  //         const reportTitle = document.createElement("h4");
-                  //         reportTitle.classList.add("bold", "report-title");
-                  //         reportTitle.textContent = `Fehler in Zeile ${reportKey}`;
-                  //         const p = document.createElement("p");
-                  //         p.classList.add("report-text", "headline-04");
-                  //         // const span2 = document.createElement("span");
-                  //         // span2.classList.add("headline-04");
-                  //         p.textContent = report;
-      
-                  //         target.appendChild(reportTitle);
-                  //         // p.appendChild(span2);
-                  //         target.appendChild(p);
-                  //       }
-                  //     }
-                  //   }
-                  // }
-              // }
-            })
-            .catch(console.error);
+              status.textContent = 'Beim Abfragen des Datenportal ist etwas schief gegangen. Eventuell ist das Portal offline.';
+              // throw error
+              // give warning
+              // do something
+              return;
           }
-        });
+            //form.reset();
+            return response.json();
+          })
+          .then((json) => {
+            const status = document.querySelector("#status");
+            status.textContent = Object.keys(json).length + ' Datensätze gefunden';
+
+            console.log(json);
+            var tabledata = json;
+            // if (target instanceof HTMLElement) {
+            //   target.innerHTML = "";
+            //   // const br = document.createElement("br");
+            //   const report_status = document.createElement("p");
+            //   report_status.textContent = json.owner_org;
+            //   target.appendChild(report_status);
+            // }
+            table.replaceData(tabledata)
+
+            //trigger download of data.csv file
+            document.getElementById("download-csv").addEventListener("click", function(){
+                table.download("csv", start_date + "_bis_" + end_date + "_CKAN_Abfrage.csv");
+            });
+
+            //trigger download of data.json file
+            document.getElementById("download-json").addEventListener("click", function(){
+                table.download("json", start_date + "_bis_" + end_date + "_CKAN_Abfrage.json");
+            });
+
+            //trigger download of data.xlsx file
+            document.getElementById("download-xlsx").addEventListener("click", function(){
+                table.download("xlsx", start_date + "_bis_" + end_date + "_CKAN_Abfrage.xlsx", {sheetName:start_date + " bis " + end_date});
+            });
+
+
+
+
+
+                //     } else if (key === "report") {
+                //       const reportKeys = Object.keys(json.report);
+                //       for (const reportKey of reportKeys) {
+                //         const report = json.report[reportKey];
+                //         const reportTitle = document.createElement("h4");
+                //         reportTitle.classList.add("bold", "report-title");
+                //         reportTitle.textContent = `Fehler in Zeile ${reportKey}`;
+                //         const p = document.createElement("p");
+                //         p.classList.add("report-text", "headline-04");
+                //         // const span2 = document.createElement("span");
+                //         // span2.classList.add("headline-04");
+                //         p.textContent = report;
+    
+                //         target.appendChild(reportTitle);
+                //         // p.appendChild(span2);
+                //         target.appendChild(p);
+                //       }
+                //     }
+                //   }
+                // }
+            // }
+          })
+          .catch(console.error);
+        }
       });
+    });
     
     </script>
   </body>
