@@ -1287,6 +1287,7 @@ input{
   margin-top: 2em;
   font: inherit;
   font-size: 14px;
+  border-width: 1px;
 }
 
 
@@ -1405,11 +1406,6 @@ a.blog-link:hover {
   margin-top:1em;
 }
 
-#download-section{
-  margin-top: 1em;
-  float: right;
-}
-
 .download-button{
   transition: background 0.1s;
   background: #91c882d2;
@@ -1423,4 +1419,19 @@ a.blog-link:hover {
     outline: 0; }
   .download-button:hover {
     background: #5b8350d2;
+    transition: background 0.1s; }
+
+.edit-button{
+  transition: background 0.1s;
+  background: #d3d3d3;
+  font-family: 'Clan Book', sans-serif;
+  font-size: 12px;
+  padding: .5rem .75rem;
+  border-radius: 5px;
+  /* color: white; */
+  border: 0px solid; }
+  .edit-button:focus {
+    outline: 0; }
+  .edit-button:hover {
+    background: #999797;
     transition: background 0.1s; }

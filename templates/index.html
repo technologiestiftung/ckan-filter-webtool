@@ -68,11 +68,11 @@
           <form action="/api" method="post" enctype="multipart/form-data" target="formDestination" id="form" class="form__validate">
             <h4 class="bold pb-2">Für welchen Zeitraum möchtest du Metadaten abfragen?</h4>
             <label style="padding-right: 0.25rem;" for="start_date">Von</label>
-            <input style="display:inline; width:100px; background-color: #e6e6e6;" type="date" id="start_date" name="start_date"
+            <input style="display:inline; width:110px; background-color: #e6e6e6;" type="date" id="start_date" name="start_date"
             value="2022-01-01"
             min="2013-01-01">
             <label style="padding-left: 2em; padding-right: 0.25rem;" for="end_date">bis</label>
-            <input style="display:inline; width:100px; background-color: #e6e6e6;" type="date" id="end_date" name="end_date"
+            <input style="display:inline; width:110px; background-color: #e6e6e6;" type="date" id="end_date" name="end_date"
             min="2013-01-01">
 
             <details>
@@ -80,7 +80,7 @@
               <br>
               <h4 class="bold pt-6 pb-2">Nach welchen Stichworten möchtest du Datensätze filtern?</h4>
               <p>Datensätze werden angezeigt wenn Titel oder Beschreibung mindestens eine dieser Zeichenkombinationen enthalten (auch Teilwörter, kommagetrennt, nicht case sensitive).</p>
-              <textarea style="height:7em; margin-top: 0.5em;" type="text" id="tags_include" name="tags_include">bezirk, ortsteil, planungsraum, prognoseraum, bezirksregion, lor, quartier, kiez, stadtteil, bezirksgrenze, postleitzahl, wahlkreis, wahlbezirk, zelle, block, fläche, gebiet, grundstück, gewässer, straße, flur, weg, linie, route, fluss, gebäude, liegenschaft, standort, station, einrichtung, stätte, spot, adress, platz, stelle, wahllokal, zentrum, bau
+              <textarea class="grey-bg" style="height:6em; margin-top: 0.5em;" type="text" id="tags_include" name="tags_include">bezirk, ortsteil, planungsraum, prognoseraum, bezirksregion, lor, quartier, kiez, stadtteil, bezirksgrenze, postleitzahl, wahlkreis, wahlbezirk, zelle, block, fläche, gebiet, grundstück, gewässer, straße, flur, weg, linie, route, fluss, gebäude, liegenschaft, standort, station, einrichtung, stätte, spot, adress, platz, stelle, wahllokal, zentrum, bau
               </textarea>
               <div class="pt-6">
                 <h4 class="bold pb-2">Möchtest du Datensätze aus dem FIS-Broker und dem Gesundheits- und Sozialinformationssystem mit einbeziehen?</h4>
@@ -102,9 +102,14 @@
         </div>
       </div>
       <div class="pb-6" id="results" style="width:90%; margin: auto;">
+        
         <div id="example-table">
         </div>
-        <div id="download-section">
+        <div class="pt-1" style="float:left;">
+          <button class="edit-button" id="undo">Rückgänig machen</button>
+          <button class="edit-button" id="redo">Wiederholen</button>
+        </div>
+        <div style="display:inline; float: right; padding-top: 0.75rem;">
           <button class="download-button" id="download-csv">Download als CSV</button>
           <button class="download-button" id="download-json">Download als JSON</button>
           <button class="download-button" id="download-xlsx">Download als XLSX</button>
@@ -477,7 +482,13 @@
             });
 
 
+            document.getElementById("undo").addEventListener("click", function(){
+              table.undo();
+            });
 
+            document.getElementById("redo").addEventListener("click", function(){
+              table.redo();
+            });
 
 
                 //     } else if (key === "report") {
