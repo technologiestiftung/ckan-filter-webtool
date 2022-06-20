@@ -74,6 +74,16 @@
             <label style="padding-left: 2em; padding-right: 0.25rem;" for="end_date">bis</label>
             <input style="display:inline; width:100px; background-color: #e6e6e6;" type="date" id="end_date" name="end_date"
             min="2013-01-01">
+
+            <details>
+              <summary class="pt-1">Erweiterte Sucheinstellungen</summary>
+              <br>
+              <label style="font-weight: bold;" for="tags_include">Filtere nach Datensätzen die mindestens eine dieser Zeichenfolgen enthalten (nicht case sensitive):</label><br>
+              <textarea style="height:7em; margin-top: 0.5em;" type="text" id="tags_include" name="tags_include">bezirk, ortsteil, planungsraum, prognoseraum, bezirksregion, lor, quartier, kiez, stadtteil, bezirksgrenze, postleitzahl, wahlkreis, wahlbezirk, zelle, block, fläche, gebiet, grundstück, gewässer, straße, flur, weg, linie, route, fluss, gebäude, liegenschaft, standort, station, einrichtung, stätte, spot, adress, platz, stelle, wahllokal, zentrum, bau
+              </textarea>
+            </details>
+            <br>
+
             <div class="pt-1">
             <button class="button-primary" type="submit" style="display:inline;">Datenportal abfragen</button>
             <p style="display:inline; padding-left:1rem" id="status"></p>
@@ -408,6 +418,7 @@
             const formData = new FormData(form);
             const end_date = formData.get("end_date")
             const start_date = formData.get("start_date")
+            console.log(formData.get("tags_include"))
             
             fetch(form.action, {
               method: "POST",

@@ -23,7 +23,7 @@ def fetch_data(start_date, end_date):
 
 def extract_columns(datasets_list):
     #extract titles, ids, notes, authors, source, date, contact, resource link
-    titles, ids, notes, author, source, contact, resource = [], [], [], [], [], [], []
+    titles, ids, notes, author, source, contact, resource, geographical_granularity = [], [], [], [], [], [], [], []
     for i in range(0, len(datasets_list)):
         titles.append(datasets_list[i]['title'])
         ids.append(datasets_list[i]['id'])
@@ -31,6 +31,13 @@ def extract_columns(datasets_list):
         author.append(datasets_list[i]['author'])
         source.append(datasets_list[i]['berlin_source'])
         contact.append(datasets_list[i]['maintainer_email'])
+        try:
+            if datasets_list[i]['geographical_granularity'] != "Berlin":
+                geographical_granularity.append(datasets_list[i]['geographical_granularity'])
+            else:
+                geographical_granularity.append('?')
+        except:
+            geographical_granularity.append('?')
         for j in range(0,datasets_list[i]['num_resources']):  #get url of first resource that is not html
             if datasets_list[i]['resources'][j]['format'] != 'HTML' and datasets_list[i]['resources'][j]['url'] != '':
                 resource.append(datasets_list[i]['resources'][j]['url'])
@@ -54,10 +61,10 @@ def extract_columns(datasets_list):
     formats_df.rename(columns = {'index':'id'}, inplace = True)
 
     #combine lists in one list
-    zipped = list(zip(titles, notes, ids, author, source, contact, resource))
+    zipped = list(zip(titles, notes, ids, author, source, contact, resource, geographical_granularity))
 
     #combine lists in a dataframe
-    datasets_df = pd.DataFrame(zipped, columns=['Titel', 'Beschreibung', 'id', 'Herausgeber:in', 'source', 'Kontakt', 'Link zu einer Ressource'])
+    datasets_df = pd.DataFrame(zipped, columns=['Titel', 'Beschreibung', 'id', 'Herausgeber:in', 'source', 'Kontakt', 'Link zu einer Ressource', 'Raumbezug'])
 
     #join with formats_df
     datasets_df = pd.merge(datasets_df, formats_df, on='id', how="outer")
@@ -81,21 +88,32 @@ def extract_columns(datasets_list):
 
     return datasets_df
 
-def filter_data(datasets_df):
+def filter_data(datasets_df, tags_include):
     #filter for datasets not from fisbroker
     datasets_df = datasets_df[datasets_df['source'].str.contains('fisbroker', case=False) == False]
 
     #filter for potential geodata with keywords
     # define keywords to include datasets
-    keywords_geodata = 'bezirk|ortsteil|planungsraum|prognoseraum|bezirksregion|lor|quartier|kiez\
-    |stadtteil|bezirksgrenze|postleitzahl|wahlkreis|wahlbezirk|zelle|block|fläche|gebiet|grundstück\
-    |gewässer|straße|flur|weg|linie|route|fluss|gebäude|liegenschaft|standort|station|einrichtung|stätte|spot\
-    |adress|platz|stelle|wahllokal|zentrum|bau'
+    print(tags_include)
+    tags_include = tags_include.replace('\r', '').replace('\n', '')
+    tags_include = tags_include.replace(",", "|")
+    keywords_geodata = tags_include.replace(" ", "")
+    print(keywords_geodata)
+    # keywords_geodata = 'bezirk|ortsteil|planungsraum|prognoseraum|bezirksregion|lor|quartier|kiez\
+    # |stadtteil|bezirksgrenze|postleitzahl|wahlkreis|wahlbezirk|zelle|block|fläche|gebiet|grundstück\
+    # |gewässer|straße|flur|weg|linie|route|fluss|gebäude|liegenschaft|standort|station|einrichtung|stätte|spot\
+    # |adress|platz|stelle|wahllokal|zentrum|bau'
     # check for keywords in title and notes and add boolean values to dataframe in new columns
     datasets_df['title_incl'] = pd.Series(datasets_df['Titel'].str.contains(keywords_geodata, case=False))
     datasets_df['notes_incl'] = pd.Series(datasets_df['Beschreibung'].str.contains(keywords_geodata, case=False))
     #filter for datasets with potential geodata
     datasets_df = datasets_df[(datasets_df['title_incl'] == True) | (datasets_df.notes_incl == True)]
+
+    keywords_raumbezug = 'keine'
+    # check for keywords in title and notes and add boolean values to dataframe in new columns
+    datasets_df['raumbezug_excl'] = pd.Series(datasets_df['Raumbezug'].str.contains(keywords_raumbezug, case=False))
+    #filter for datasets with potential geodata
+    datasets_df = datasets_df[(datasets_df['raumbezug_excl'] == False)]
 
     #drop columns
     datasets_df = datasets_df.drop(['title_incl', 'notes_incl','source', 'id', 'formats'], axis = 1)
@@ -116,7 +134,7 @@ def enrich_data(filtered_df):
     filtered_df.loc[filtered_df['Titel'].str.contains('steglitz-zehlendorf|marzahn-hellersdorf|treptow-köpenick|neukölln|pankow|mitte|lichtenberg|spandau|reinickendorf|tempelhof-schöneberg|charlottenburg-wilmersdorf|friedrichshain-kreuzberg', case=False), 'geographische Verfügbarkeit'] = 'Bezirk'
 
     #add empty column Raumbezug
-    filtered_df['Raumbezug'] = ''
+    #filtered_df['Raumbezug'] = ''
 
     #automatically fill in Maßnahme
     filtered_df.loc[filtered_df['Geoformat']==True, 'notwendige Maßnahme zur Geoformatierung'] = 'keine notwendig'

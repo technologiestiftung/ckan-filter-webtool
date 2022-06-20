@@ -19,13 +19,15 @@ def api():
         start_date = request.form['start_date']
         end_date = request.form['end_date']
 
+        tags_include = request.form['tags_include']
+
         try:
             datasets_list = fetch_data(start_date, end_date)
         except:
             return Response(status=400, mimetype='application/json')
 
         dataset_df = extract_columns(datasets_list)
-        filtered_df = filter_data(dataset_df)
+        filtered_df = filter_data(dataset_df, tags_include)
         enriched_data = enrich_data(filtered_df)
         final_json = transform_to_json(enriched_data)
         payload = json.dumps(final_json)

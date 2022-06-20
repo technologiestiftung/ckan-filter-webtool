@@ -9,20 +9,13 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 
 textarea[type=text]{
   height:10em;
-  width:100%
+  width:50% !important;
+  font-size: 100%;
+  font: inherit;
 }
 iframe{
   height:12em;
   width:100%
-}
-
-@media screen and (max-width: 1200px) and (min-width:1000px) {
-textarea[type=text]{
-  width:750px;
-  }
-  iframe{
-    width:750px;
-  }
 }
 
 /* HTML5 display-role reset for older browsers */
