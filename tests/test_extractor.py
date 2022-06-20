@@ -15,7 +15,8 @@ from utils import extractor
 START_DATE = "2022-04-01"
 END_DATE = "2022-05-27"
 TAGS_INCLUDE = 'bezirk, ortsteil, planungsraum, prognoseraum, bezirksregion, lor, quartier, kiez, stadtteil, bezirksgrenze, postleitzahl, wahlkreis, wahlbezirk, zelle, block, fläche, gebiet, grundstück, gewässer, straße, flur, weg, linie, route, fluss, gebäude, liegenschaft, standort, station, einrichtung, stätte, spot, adress, platz, stelle, wahllokal, zentrum, bau'
-    
+FISBROKER = False
+GSI = False 
 
 @pytest.mark.parametrize(
     "start_date, end_date, expected_result", [
@@ -48,7 +49,7 @@ def test_filter_data():
 
     datasets_list = extractor.fetch_data(START_DATE, END_DATE)
     datasets_df = extractor.extract_columns(datasets_list)
-    filtered_df = extractor.filter_data(datasets_df, TAGS_INCLUDE)
+    filtered_df = extractor.filter_data(datasets_df, TAGS_INCLUDE, FISBROKER, GSI)
 
     expected_headers = ['Titel', 'Beschreibung', 'Herausgeber:in', 'Kontakt', 'Link zu einer Ressource', 'Geoformat']
 
@@ -62,7 +63,7 @@ def test_enrich_data():
 
     datasets_list = extractor.fetch_data(START_DATE, END_DATE)
     datasets_df = extractor.extract_columns(datasets_list)
-    filtered_df = extractor.filter_data(datasets_df, TAGS_INCLUDE)
+    filtered_df = extractor.filter_data(datasets_df, TAGS_INCLUDE, FISBROKER, GSI)
     enriched_df = extractor.enrich_data(filtered_df)
 
     expected_headers =  ['Titel', 'Beschreibung', 'Herausgeber:in', 'Kontakt', 'Link zu einer Ressource', 'Geoformat', 'Link zu Datensatzeintrag', 'geographische Verfügbarkeit', 'Raumbezug', 'notwendige Maßnahme zur Geoformatierung', 'Priorisierung', 'Notizen']
@@ -76,7 +77,7 @@ def test_transform_to_json():
 
     datasets_list = extractor.fetch_data(START_DATE, END_DATE)
     datasets_df = extractor.extract_columns(datasets_list)
-    filtered_df = extractor.filter_data(datasets_df, TAGS_INCLUDE)
+    filtered_df = extractor.filter_data(datasets_df, TAGS_INCLUDE, FISBROKER, GSI)
     enriched_df = extractor.enrich_data(filtered_df)
     parsed = extractor.transform_to_json(enriched_df)
 
