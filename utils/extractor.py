@@ -2,6 +2,7 @@ import requests
 import json
 import pandas as pd
 import numpy as np
+from difflib import SequenceMatcher
 
 def fetch_data(start_date, end_date):
 
@@ -104,10 +105,7 @@ def filter_data(datasets_df, tags_include, fisbroker_check, gsi_check):
     tags_include = tags_include.replace(",", "|")
     keywords_geodata = tags_include.replace(" ", "")
     print(keywords_geodata)
-    # keywords_geodata = 'bezirk|ortsteil|planungsraum|prognoseraum|bezirksregion|lor|quartier|kiez\
-    # |stadtteil|bezirksgrenze|postleitzahl|wahlkreis|wahlbezirk|zelle|block|fläche|gebiet|grundstück\
-    # |gewässer|straße|flur|weg|linie|route|fluss|gebäude|liegenschaft|standort|station|einrichtung|stätte|spot\
-    # |adress|platz|stelle|wahllokal|zentrum|bau'
+
     # check for keywords in title and notes and add boolean values to dataframe in new columns
     datasets_df['title_incl'] = pd.Series(datasets_df['Titel'].str.contains(keywords_geodata, case=False))
     datasets_df['notes_incl'] = pd.Series(datasets_df['Beschreibung'].str.contains(keywords_geodata, case=False))
@@ -137,6 +135,10 @@ def enrich_data(filtered_df):
     filtered_df.loc[~filtered_df['Herausgeber:in'].str.contains('bezirk|steglitz-zehlendorf|marzahn-hellersdorf|treptow-köpenick|neukölln|pankow|mitte|lichtenberg|spandau|reinickendorf|tempelhof-schöneberg|charlottenburg-wilmersdorf|friedrichshain-kreuzberg', case=False), 'geographische Verfügbarkeit'] = 'landesweit'
     filtered_df.loc[filtered_df['Herausgeber:in'].str.contains('bezirk|steglitz-zehlendorf|marzahn-hellersdorf|treptow-köpenick|neukölln|pankow|mitte|lichtenberg|spandau|reinickendorf|tempelhof-schöneberg|charlottenburg-wilmersdorf|friedrichshain-kreuzberg', case=False), 'geographische Verfügbarkeit'] = 'Bezirk'
     filtered_df.loc[filtered_df['Titel'].str.contains('steglitz-zehlendorf|marzahn-hellersdorf|treptow-köpenick|neukölln|pankow|mitte|lichtenberg|spandau|reinickendorf|tempelhof-schöneberg|charlottenburg-wilmersdorf|friedrichshain-kreuzberg', case=False), 'geographische Verfügbarkeit'] = 'Bezirk'
+   
+    filtered_df.loc[filtered_df['Titel'].str.replace(" |-|zur|der|steglitz-zehlendorf|marzahn-hellersdorf|treptow-köpenick|neukölln|pankow|mitte|lichtenberg|spandau|reinickendorf|tempelhof-schöneberg|charlottenburg-wilmersdorf|friedrichshain-kreuzberg", "", case=False).duplicated(keep=False), 'geographische Verfügbarkeit'] = 'ähnlicher Datensatz in mehreren Bezirken'
+
+    #filtered_df.loc[filtered_df['geographische Verfügbarkeit'].str.contains('Bezirk')] = 
 
     #add empty column Raumbezug
     #filtered_df['Raumbezug'] = ''
