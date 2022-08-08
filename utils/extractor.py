@@ -95,7 +95,7 @@ def filter_data(datasets_df, tags_include, fisbroker_check, gsi_check):
     
     #filter for datasets not from gsi
     if gsi_check == False:
-        datasets_df = datasets_df[datasets_df['source'].str.contains('gsi', case=False) == False]
+        datasets_df = datasets_df[datasets_df['source'].str.contains('api-senges', case=False) == False]
 
     #filter for potential geodata with keywords
     # define keywords to include datasets
