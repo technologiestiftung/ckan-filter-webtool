@@ -56,7 +56,7 @@
         <ol>
           <li>Zunächst werden anhand einer Abfrage des Datenregisters über die CKAN-API alle potentiell relevanten (Geo-)Datensätze herausgefiltert. Dafür werden die Metadaten nach verschiedenen Stichwörtern für einen bestimmten Zeitraum veröffentlicht oder aktualisert wurden gesucht.</li>
           <li>Im zweiten Schritt sollten die tabellarisch angezeigten Ergebnisse manuell geprüft und um fehlende Informationen ergänzt werden. Die Tabelle ist filter und editierbar. Durch die Spalte zur Priorisierung können die Ergebnisse ausserdem direkt manuell bewertet werden.</li>
-          <li>Zuletzt kann die Ergebnisliste als XLSX, CSV oder JSON-Datei für den weiteren Gebrauch und zum Teilen exportiert werden.</li>
+          <li>Zuletzt kann die Ergebnisliste als XLSX oder JSON-Datei für den weiteren Gebrauch und zum Teilen exportiert werden.</li>
         </ol>
         </div>
       </div>
@@ -68,11 +68,11 @@
           <form action="/api" method="post" enctype="multipart/form-data" target="formDestination" id="form" class="form__validate">
             <h4 class="bold pb-2">Für welchen Zeitraum möchtest du Metadaten abfragen?</h4>
             <label style="padding-right: 0.25rem;" for="start_date">Von</label>
-            <input style="display:inline; width:110px; background-color: #e6e6e6;" type="date" id="start_date" name="start_date"
+            <input class="filter" style="display:inline; width:110px; background-color: #e6e6e6;" type="date" id="start_date" name="start_date"
             value="2022-01-01"
             min="2013-01-01">
             <label style="padding-left: 2em; padding-right: 0.25rem;" for="end_date">bis</label>
-            <input style="display:inline; width:110px; background-color: #e6e6e6;" type="date" id="end_date" name="end_date"
+            <input class="filter" style="display:inline; width:110px; background-color: #e6e6e6;" type="date" id="end_date" name="end_date"
             min="2013-01-01">
 
             <details>
@@ -84,9 +84,9 @@
               </textarea>
               <div class="pt-6">
                 <h4 class="bold pb-2">Möchtest du Datensätze aus dem FIS-Broker und dem Gesundheits- und Sozialinformationssystem mit einbeziehen?</h4>
-                <input type="checkbox" id="fisbroker" name="fisbroker">
+                <input class="filter" type="checkbox" id="fisbroker" name="fisbroker">
                 <label for="fisbroker">FIS-Broker abfragen</label>
-                <input style="margin-left:2rem;" type="checkbox" id="gsi" name="gsi">
+                <input class="filter" style="margin-left:2rem;" type="checkbox" id="gsi" name="gsi">
                 <label for="gsi">GSI abfragen</label>
               </div>
             </details>
@@ -108,9 +108,9 @@
         <div class="pt-1" style="float:left;">
           <button class="edit-button" id="undo">Rückgänig machen</button>
           <button class="edit-button" id="redo">Wiederholen</button>
+          <button class="edit-button" id="delete-rows" style="">Ausgewählte Reihen löschen</button>
         </div>
         <div style="display:inline; float: right; padding-top: 0.75rem;">
-          <button class="download-button" id="download-csv">Download als CSV</button>
           <button class="download-button" id="download-json">Download als JSON</button>
           <button class="download-button" id="download-xlsx">Download als XLSX</button>
         </div>
@@ -360,26 +360,28 @@
     };
     
     var table_columns = [                 //define the table columns
-      {title:"Titel", field:"Titel", headerMenu:headerMenu, headerPopup:headerPopupFormatter, headerPopupIcon:"<i class='fas fa-filter' title='Spalte filtern'></i>", headerFilter:emptyHeaderFilter, headerFilterFunc:"like", clickPopup:rowPopupFormatter},
-      //{title:"Beschreibung", field:"Beschreibung", headerMenu:headerMenu},
-      {title:"Herausgeber:in", field:"Herausgeber:in", headerMenu:headerMenu, clickPopup:rowPopupFormatter},
+    {formatter:"rowSelection", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, cellClick:function(e, cell){
+        cell.getRow().toggleSelect();
+      }, width: 20},
+      {title:"Titel", field:"Titel", headerMenu:headerMenu, headerPopup:headerPopupFormatter, headerPopupIcon:"<i class='fas fa-filter' title='Spalte filtern'></i>", headerFilter:emptyHeaderFilter, headerFilterFunc:"like", clickPopup:rowPopupFormatter, width: 200},
+      {title:"Beschreibung", field:"Beschreibung", headerMenu:headerMenu, visible: false, width: 400},
+      {title:"Herausgeber:in", field:"Herausgeber:in", headerMenu:headerMenu, clickPopup:rowPopupFormatter, width: 150},
+      {title:"Verfügbarkeit", field:"geographische Verfügbarkeit", editor:"input", width: 130, visible: false},
       // {title:"Kontakt", field:"Kontakt", editor:"input", headerMenu:headerMenu},
       // {title:"Formate", field:"formats", editor:"input", headerMenu:headerMenu},
-      {title:"Geoformat", field:"Geoformat", headerMenu:headerMenu, clickPopup:rowPopupFormatter},
-      {title:"Link zur ersten Ressource", field:"Link zu einer Ressource", formatter:"link", headerMenu:headerMenu, formatterParams:{
+      {title:"Geoformat", field:"Geoformat", clickPopup:rowPopupFormatter, width: 105, editor:"input"},
+      {title:"Raumbezug", field:"Raumbezug", editor:"input"},
+      {title:"Erste Ressource", field:"Link zu einer Ressource", formatter:"link", formatterParams:{
           target:"_blank",
-      }},
-      {title:"Link zu Datensatzeintrag", field:"Link zu Datensatzeintrag", formatter:"link", headerMenu:headerMenu,formatterParams:{
+      }, width: 150},
+      {title:"Datensatzeintrag", field:"Link zu Datensatzeintrag", formatter:"link",formatterParams:{
           target:"_blank",
-      }},
-      {title:"geographische Verfügbarkeit", field:"geographische Verfügbarkeit", editor:"input", headerMenu:headerMenu},
-      {title:"Raumbezug", field:"Raumbezug", editor:"input", headerMenu:headerMenu},
-      {title:"notwendige Maßnahme zur Geoformatierung", field:"notwendige Maßnahme zur Geoformatierung", editor:"input", headerMenu:headerMenu},
-      {title:"Priorisierung", field:"Priorisierung", formatter:"star", editor:true, formatterParams:{stars:4}, hozAlign:"center"},
-      {title:"Notizen", field:"Notizen", editor:"input", headerMenu:headerMenu}
+      }, width: 150},
+      //{title:"notwendige Maßnahme zur Geoformatierung", field:"notwendige Maßnahme zur Geoformatierung", editor:"input"},
+      {title:"GDI-Priorisierung", field:"Priorisierung", formatter:"star", editor:true, formatterParams:{stars:4}, hozAlign:"center"},
+      {title:"Eigene Notizen", field:"Notizen", editor:"input"}
     ];
 
-    var tabledata_sample = [{'Titel': ' ', 'Beschreibung': ' ', 'Herausgeber:in': ' ', 'Kontakt': ' ', 'Link zu einer Ressource': ' ', 'Geoformat': ' ', 'Link zu Datensatzeintrag': '', 'geographische Verfügbarkeit': ' ', 'Raumbezug': '', 'notwendige Maßnahme zur Geoformatierung': '', 'Priorisierung': '', 'Notizen': ''}];
               // if (target instanceof HTMLElement) {
               //   target.innerHTML = "";
               //   // const br = document.createElement("br");
@@ -388,15 +390,16 @@
               //   target.appendChild(report_status);
               // }
     var table = new Tabulator("#example-table", {
-      data:tabledata_sample,           //load row data from array
+      //data:tabledata_sample,           //load row data from array
       layout:"fitColumns",      //fit columns to width of table
       //responsiveLayout:"hide",  //hide columns that dont fit on the table
       //tooltips:true,            //show tool tips on cells
       addRowPos:"top",          //when adding a new row, add it to the top of the table
       history:true,             //allow undo and redo actions on the table
       pagination:"local",       //paginate the data
-      paginationSize:20,         //allow 7 rows per page of data
+      paginationSize:15,         //allow 7 rows per page of data
       paginationCounter:"rows", //display count of paginated rows in footer
+      paginationSizeSelector:[15, 30, 60],
       movableColumns:true,      //allow column order to be changed
       history:true, //record table history
       //rowClickPopup:rowPopupFormatter,
@@ -404,6 +407,7 @@
       //   {column:"date", dir:"desc"},
       // ],
       columns: table_columns,
+      groupBy:"geographische Verfügbarkeit",
     });
 
     // @ts-check
@@ -466,14 +470,12 @@
             // }
             table.replaceData(tabledata)
 
-            //trigger download of data.csv file
-            document.getElementById("download-csv").addEventListener("click", function(){
-                table.download("csv", start_date + "_bis_" + end_date + "_CKAN_Abfrage.csv");
-            });
-
             //trigger download of data.json file
             document.getElementById("download-json").addEventListener("click", function(){
-                table.download("json", start_date + "_bis_" + end_date + "_CKAN_Abfrage.json");
+                table.download("json", start_date + "_bis_" + end_date + "_CKAN_Abfrage.json", {
+                  orientation:"portrait", //set page orientation to portrait
+                  title:"Abfrage des Berliner Datenportal für den Zeitraum" + start_date + "_bis_" + end_date //add title to report
+                });
             });
 
             //trigger download of data.xlsx file
@@ -481,6 +483,15 @@
                 table.download("xlsx", start_date + "_bis_" + end_date + "_CKAN_Abfrage.xlsx", {sheetName:start_date + " bis " + end_date});
             });
 
+            document.getElementById("delete-rows").addEventListener("click", function(){
+              var selectedRows = table.getSelectedRows();
+              table.setGroupBy();
+              for(var i=0;i<selectedRows.length;i++)
+              {
+              selectedRows[i].delete();
+              }
+              table.setGroupBy('geographische Verfügbarkeit');
+          });
 
             document.getElementById("undo").addEventListener("click", function(){
               table.undo();

@@ -136,7 +136,7 @@ def enrich_data(filtered_df):
     filtered_df.loc[filtered_df['Herausgeber:in'].str.contains('bezirk|steglitz-zehlendorf|marzahn-hellersdorf|treptow-köpenick|neukölln|pankow|mitte|lichtenberg|spandau|reinickendorf|tempelhof-schöneberg|charlottenburg-wilmersdorf|friedrichshain-kreuzberg', case=False), 'geographische Verfügbarkeit'] = 'Bezirk'
     filtered_df.loc[filtered_df['Titel'].str.contains('steglitz-zehlendorf|marzahn-hellersdorf|treptow-köpenick|neukölln|pankow|mitte|lichtenberg|spandau|reinickendorf|tempelhof-schöneberg|charlottenburg-wilmersdorf|friedrichshain-kreuzberg', case=False), 'geographische Verfügbarkeit'] = 'Bezirk'
    
-    filtered_df.loc[filtered_df['Titel'].str.replace(" |-|zur|der|steglitz-zehlendorf|marzahn-hellersdorf|treptow-köpenick|neukölln|pankow|mitte|lichtenberg|spandau|reinickendorf|tempelhof-schöneberg|charlottenburg-wilmersdorf|friedrichshain-kreuzberg", "", case=False).duplicated(keep=False), 'geographische Verfügbarkeit'] = 'ähnlicher Datensatz in mehreren Bezirken'
+    filtered_df.loc[filtered_df['Titel'].str.replace(" |-|zur|der|steglitz-zehlendorf|marzahn-hellersdorf|treptow-köpenick|neukölln|pankow|mitte|lichtenberg|spandau|reinickendorf|tempelhof-schöneberg|charlottenburg-wilmersdorf|friedrichshain-kreuzberg", "", case=False).duplicated(keep=False), 'geographische Verfügbarkeit'] = 'mehrere Bezirke'
 
     #filtered_df.loc[filtered_df['geographische Verfügbarkeit'].str.contains('Bezirk')] = 
 
@@ -151,7 +151,7 @@ def enrich_data(filtered_df):
     filtered_df['Priorisierung'] = 0
 
     #add empty column Notes
-    filtered_df['Notizen'] = ''
+    filtered_df['Eigene Notizen'] = ''
 
     return filtered_df
 

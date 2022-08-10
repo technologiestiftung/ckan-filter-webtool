@@ -1281,7 +1281,7 @@ ul#main-navigation li.active {
   margin-top: auto;
 } */
 
-input{
+.filter{
   /* display: block;
   width: 150px; */
   margin-top: 2em;
@@ -1435,3 +1435,10 @@ a.blog-link:hover {
   .edit-button:hover {
     background: #999797;
     transition: background 0.1s; }
+
+.tabulator-col-content {
+  font-size: 12px;
+  font-weight: bold;
+  padding-top: 4px;
+  padding-bottom: 4px
+}
