@@ -150,8 +150,43 @@ def enrich_data(filtered_df):
     #add empty column Priorisierung
     filtered_df['Priorisierung'] = 0
 
+    def calc_prio(row):
+        prio = 0
+        if row['geographische Verfügbarkeit'] == 'landesweit':
+            prio += 2
+        elif row['geographische Verfügbarkeit'] == 'mehrere Bezirke':
+            prio += 1
+        else:
+            prio += 0
+
+        if row['Geoformat'] != '-':
+            if row['Raumbezug'] != 'Bezirk' and row['Raumbezug'] != '?':
+                prio += 3
+            else:
+                prio += 2
+        else:
+            if row['Raumbezug'] != 'Bezirk' and row['Raumbezug'] != '?':
+                prio += 1
+            else:
+                prio += 0
+
+        return prio
+        
+    filtered_df["Priorisierung"] = filtered_df.apply(calc_prio, axis=1)
+
+
     #add empty column Notes
-    filtered_df['Eigene Notizen'] = ''
+    filtered_df['Notizen'] = ''
+
+    def fill_notizen(row):
+        if row['geographische Verfügbarkeit'] != 'landesweit' and row['Raumbezug'] == 'Bezirk':
+            return 'Achtung: Der Raumbezug scheint in den Metadaten nicht korrekt angeben worden zu sein.'
+        else: 
+            return ''
+
+
+    filtered_df['Notizen'] = filtered_df.apply(fill_notizen, axis=1)
+
 
     return filtered_df
 
