@@ -69,7 +69,6 @@ document.addEventListener("DOMContentLoaded", function () {
         let result = it.next();
         // formData.set("txt", fileContent);
         while (!result.done) {
-          // console.log(result.value);
           result = it.next();
         }
       }
@@ -88,7 +87,6 @@ document.addEventListener("DOMContentLoaded", function () {
           return response.json();
         })
         .then((json) => {
-          console.log(json);
           if (target instanceof HTMLElement) {
             target.innerHTML = "";
             // const br = document.createElement("br");
