@@ -85,6 +85,9 @@
                 <input class="filter" style="margin-left:2rem;" type="checkbox" id="gsi" name="gsi">
                 <label for="gsi">GSI abfragen</label>
               </div>
+              <h4 class="bold pt-6 pb-2">Nach welchen Stichworten möchtest Du Datensätze ausschließen?</h4>
+              <p>Datensätze werden angezeigt, wenn Titel oder Beschreibung NICHT mindestens eine dieser Zeichenkombinationen enthalten (auch Teilwörter, kommagetrennt, nicht case sensitive).</p>
+              <textarea class="grey-bg" style="height:6em; margin-top: 0.5em;" type="text" id="tags_exclude" name="tags_exclude"></textarea>
             </details>
             <br>
 
@@ -495,7 +498,6 @@
             const status = document.querySelector("#status");
             status.textContent = Object.keys(json).length + ' Datensätze gefunden';
 
-            console.log(json);
             var tabledata = json;
             // if (target instanceof HTMLElement) {
             //   target.innerHTML = "";

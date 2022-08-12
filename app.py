@@ -20,7 +20,11 @@ def api():
         end_date = request.form['end_date']
 
         tags_include = request.form['tags_include']
-
+        try:
+            tags_exclude = request.form['tags_exclude']
+        except:
+            tags_exclude = False
+        print(tags_exclude)
         try:
             fisbroker_check = request.form['fisbroker']
         except:
@@ -36,7 +40,7 @@ def api():
             return Response(status=400, mimetype='application/json')
 
         dataset_df = extract_columns(datasets_list)
-        filtered_df = filter_data(dataset_df, tags_include, fisbroker_check, gsi_check)
+        filtered_df = filter_data(dataset_df, tags_include, tags_exclude, fisbroker_check, gsi_check)
         enriched_data = enrich_data(filtered_df)
         final_json = transform_to_json(enriched_data)
         payload = json.dumps(final_json)

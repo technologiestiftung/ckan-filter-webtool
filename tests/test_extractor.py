@@ -7,7 +7,6 @@ import sys
 from pathlib import Path
 path = Path(__file__).parent.parent
 
-print(path.resolve())
 sys.path.append(path.resolve)
 
 from utils import extractor

@@ -89,7 +89,7 @@ def extract_columns(datasets_list):
 
     return datasets_df
 
-def filter_data(datasets_df, tags_include, fisbroker_check, gsi_check):
+def filter_data(datasets_df, tags_include, tags_exclude, fisbroker_check, gsi_check):
     #filter for datasets not from fisbroker
     if fisbroker_check == False:
         datasets_df = datasets_df[datasets_df['source'].str.contains('fisbroker', case=False) == False]
@@ -105,7 +105,6 @@ def filter_data(datasets_df, tags_include, fisbroker_check, gsi_check):
     tags_include = tags_include.replace(",", "|")
     keywords_geodata = tags_include.replace(" ", "")
     print(keywords_geodata)
-
     # check for keywords in title and notes and add boolean values to dataframe in new columns
     datasets_df['title_incl'] = pd.Series(datasets_df['Titel'].str.contains(keywords_geodata, case=False))
     datasets_df['notes_incl'] = pd.Series(datasets_df['Beschreibung'].str.contains(keywords_geodata, case=False))
@@ -117,6 +116,20 @@ def filter_data(datasets_df, tags_include, fisbroker_check, gsi_check):
     datasets_df['raumbezug_excl'] = pd.Series(datasets_df['Raumbezug'].str.contains(keywords_raumbezug, case=False))
     #filter for datasets with potential geodata
     datasets_df = datasets_df[(datasets_df['raumbezug_excl'] == False)]
+
+
+    # define keywords to exclude datasets
+    if tags_exclude:
+        tags_exclude = tags_exclude.replace('\r', '').replace('\n', '')
+        tags_exclude = tags_exclude.replace(",", "|")
+        keywords_exclude = tags_exclude.replace(" ", "")
+        print(keywords_exclude)
+        # check for keywords in title and notes and add boolean values to dataframe in new columns
+        datasets_df['title_exclude'] = pd.Series(datasets_df['Titel'].str.contains(keywords_exclude, case=False))
+        datasets_df['notes_exclude'] = pd.Series(datasets_df['Beschreibung'].str.contains(keywords_exclude, case=False))
+        #filter for datasets with potential geodata
+        datasets_df = datasets_df[(datasets_df['title_exclude'] == False) | (datasets_df.notes_exclude == False)]
+        datasets_df = datasets_df.drop(['title_exclude', 'notes_exclude'], axis = 1)
 
     #drop columns
     datasets_df = datasets_df.drop(['title_incl', 'notes_incl','source', 'id', 'formats'], axis = 1)
