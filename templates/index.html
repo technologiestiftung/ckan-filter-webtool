@@ -74,12 +74,12 @@
             <details>
               <summary class="pt-6">Erweiterte Sucheinstellungen</summary>
               <br>
-              <h4 class="bold pt-6 pb-2">Nach welchen Stichworten möchtest du Datensätze filtern?</h4>
-              <p>Datensätze werden angezeigt wenn Titel oder Beschreibung mindestens eine dieser Zeichenkombinationen enthalten (auch Teilwörter, kommagetrennt, nicht case sensitive).</p>
+              <h4 class="bold pt-6 pb-2">Nach welchen Stichworten möchtest Du Datensätze filtern?</h4>
+              <p>Datensätze werden angezeigt, wenn Titel oder Beschreibung mindestens eine dieser Zeichenkombinationen enthalten (auch Teilwörter, kommagetrennt, nicht case sensitive).</p>
               <textarea class="grey-bg" style="height:6em; margin-top: 0.5em;" type="text" id="tags_include" name="tags_include">bezirke, ortsteil, planungsraum, prognoseraum, bezirksregion, lor, quartier, kiez, stadtteil, bezirksgrenze, postleitzahl, wahlkreis, wahlbezirk, stimmbezirk, zelle, block, fläche, gebiet, grundstück, gewässer, straße, flur, weg, linie, route, fluss, gebäude, liegenschaft, standort, station, einrichtung, stätte, spot, adress, platz, stelle, wahllokal, zentrum, bau, messung
               </textarea>
               <div class="pt-6">
-                <h4 class="bold pb-2">Möchtest du Datensätze aus dem FIS-Broker und dem Gesundheits- und Sozialinformationssystem mit einbeziehen?</h4>
+                <h4 class="bold pb-2">Möchtest Du Datensätze aus dem FIS-Broker und dem Gesundheits- und Sozialinformationssystem mit einbeziehen?</h4>
                 <input class="filter" type="checkbox" id="fisbroker" name="fisbroker">
                 <label for="fisbroker">FIS-Broker abfragen</label>
                 <input class="filter" style="margin-left:2rem;" type="checkbox" id="gsi" name="gsi">
@@ -102,7 +102,7 @@
         <div id="example-table">
         </div>
         <div class="pt-1" style="float:left;">
-          <button class="edit-button" id="undo">Rückgänig machen</button>
+          <button class="edit-button" id="undo">Rückgängig machen</button>
           <button class="edit-button" id="redo">Wiederholen</button>
           <button class="delete-button" id="delete-rows">Ausgewählte Reihen löschen</button>
         </div>
@@ -123,11 +123,11 @@
         </p>
         <ul class="pb-3">
           <li>Wurden Datensätze fälschlicherweise als Geodaten identifiziert?</li>
-          <li>Wurde die geographische Verfügbarkeit des Datensatzes (soweit vorhanden) korrekt identifiziert? Welche geographische Verfügbarkeit weisen Datensätze mit fehlenden Angaben auf?
-          <li>Welchen Raumbezug weisen die Datensätze auf?</li>
+          <li>Wurde die geographische Verfügbarkeit des Datensatzes korrekt identifiziert?
+          <li>Wurde der Raumbezug des Datensatzes (soweit vorhanden) korrekt identifiziert? Welchen Raumbezug weisen Datensätze mit fehlenden Angaben auf?</li>
           <li>Wie sollten die Datensätze priorisiert werden?</li>
         </ul>
-        <p>Die betreffenden Informationen können direkt in der Tabelle bearbeitet werden. Die Daten sind filter, sortier- und editierbar. Reihen können verschoben und gelöscht werden und Spalten ein- und ausgeblendet. Durch die Spalte zur Priorisierung können die Ergebnisse ausserdem bewertet werden. Das Tool macht bereits einen ersten automatischen Priorisierungsvorschlag, basierend auf der räumlichen Verfügbarkeit, dem Vorhanden sein eines Geoformates und eines Raumbezugs.
+        <p>Die betreffenden Informationen können direkt in der Tabelle bearbeitet werden. Die Daten sind filter-, sortier- und editierbar. Reihen können verschoben und gelöscht werden und Spalten ein- und ausgeblendet. Durch die Spalte zur Priorisierung können die Ergebnisse außerdem bewertet werden. Das Tool macht bereits einen ersten automatischen Priorisierungsvorschlag, basierend auf der räumlichen Verfügbarkeit, dem Vorhanden sein eines Geoformates und eines Raumbezugs.
         </p>
         <p>Zuletzt kann die Ergebnisliste als XLSX oder JSON-Datei für den weiteren Gebrauch und zum Teilen exportiert werden.</p>
     </div>
@@ -361,17 +361,17 @@
         cell.getRow().toggleSelect();
       }, width: 20},
       {title:"Verfügbarkeit", field:"geographische Verfügbarkeit", editor:"input", visible: false},
-      {title:"Titel", field:"Titel", headerMenu:headerMenu, headerPopup:headerPopupFormatter, headerPopupIcon:"<i class='fas fa-filter' title='Spalte filtern'></i>", headerFilter:emptyHeaderFilter, headerFilterFunc:"like", clickPopup:rowPopupFormatter},
+      {title:"Titel", field:"Titel", widthGrow:2, headerMenu:headerMenu, headerPopup:headerPopupFormatter, headerPopupIcon:"<i class='fas fa-filter' title='Spalte filtern'></i>", headerFilter:emptyHeaderFilter, headerFilterFunc:"like", clickPopup:rowPopupFormatter},
       {title:"Herausgeber:in", field:"Herausgeber:in", headerMenu:headerMenu, clickPopup:rowPopupFormatter},
       // {title:"Kontakt", field:"Kontakt", editor:"input", headerMenu:headerMenu},
       {title:"Geoformat", field:"Geoformat", clickPopup:rowPopupFormatter, editor:"input"},
       {title:"Raumbezug", field:"Raumbezug", editor:"input"},
       {title:"Erste Ressource", field:"Link zu einer Ressource", formatter:"link", formatterParams:{
           target:"_blank",
-      }, width: 150},
+      }},
       {title:"Datensatzeintrag", field:"Link zu Datensatzeintrag", formatter:"link",formatterParams:{
           target:"_blank",
-      }, width: 150},
+      }},
       {title:"GDI-Priorisierung", field:"Priorisierung", formatter:"star", editor:true, formatterParams:{stars:5}, hozAlign:"center", width: 150},
       {title:"Notizen", field:"Notizen", editor:"input"},
       {title:"Beschreibung", field:"Beschreibung", headerMenu:headerMenu, visible: false},
