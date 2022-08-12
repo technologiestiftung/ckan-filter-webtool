@@ -24,7 +24,6 @@ def api():
             tags_exclude = request.form['tags_exclude']
         except:
             tags_exclude = False
-        print(tags_exclude)
         try:
             fisbroker_check = request.form['fisbroker']
         except:
