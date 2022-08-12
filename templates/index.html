@@ -127,7 +127,7 @@
           <li>Welchen Raumbezug weisen die Datensätze auf?</li>
           <li>Wie sollten die Datensätze priorisiert werden?</li>
         </ul>
-        <p>Die betreffenden Informationen können direkt in der Tabelle bearbeitet werden. Die Tabelle ist filter und editierbar. Durch die Spalte zur Priorisierung können die Ergebnisse ausserdem bewertet werden. Das Tool macht bereits einen ersten automatischen Priorisierungsvorschlag, basierend auf der räumlichen Verfügbarkeit, dem Vorhanden sein eines Geoformates und eines Raumbezugs.
+        <p>Die betreffenden Informationen können direkt in der Tabelle bearbeitet werden. Die Daten sind filter, sortier- und editierbar. Reihen können verschoben und gelöscht werden und Spalten ein- und ausgeblendet. Durch die Spalte zur Priorisierung können die Ergebnisse ausserdem bewertet werden. Das Tool macht bereits einen ersten automatischen Priorisierungsvorschlag, basierend auf der räumlichen Verfügbarkeit, dem Vorhanden sein eines Geoformates und eines Raumbezugs.
         </p>
         <p>Zuletzt kann die Ergebnisliste als XLSX oder JSON-Datei für den weiteren Gebrauch und zum Teilen exportiert werden.</p>
     </div>
@@ -377,6 +377,44 @@
       {title:"Beschreibung", field:"Beschreibung", headerMenu:headerMenu, visible: false},
     ];
 
+  var de = {
+    "de":{ 
+      "groups":{
+        "item":"Datensatz",
+        "items":"Datensätze",
+      },
+      "columns":{
+      },
+      "data":{
+        "loading":"Lädt",
+        "error":"Error",
+      },
+      "pagination":{
+        "page_size":"Reihen pro Seite",
+        "page_title":"Zeige Seite",
+        "first":"Erste",
+        "first_title":"Erste Seite",
+        "last":"Letzte",
+        "last_title":"Letzte Seite",
+        "prev":"Vorherige",
+        "prev_title":"Vorherige Seite",
+        "next":"Nächste",
+        "next_title":"Nächste Seite",
+        "all":"Alle",
+        "counter":{
+          "showing": "Zeige",
+          "of": "von",
+          "rows": "Reihen",
+          "pages": "Seiten",
+        }
+      },
+      "headerFilters":{
+        "default":"Spalte filtern...",
+        "columns":{}
+      }
+    },
+  };
+
               // if (target instanceof HTMLElement) {
               //   target.innerHTML = "";
               //   // const br = document.createElement("br");
@@ -385,6 +423,8 @@
               //   target.appendChild(report_status);
               // }
     var table = new Tabulator("#example-table", {
+      langs: de,
+      locale: "de",
       //data:tabledata_sample,           //load row data from array
       layout:"fitColumns",      //fit columns to width of table
       //responsiveLayout:"hide",  //hide columns that dont fit on the table
