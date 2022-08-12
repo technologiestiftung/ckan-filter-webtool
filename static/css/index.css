@@ -413,7 +413,7 @@ h1#title {
 .section {
   margin: 0 auto;
   position: relative;
-  width: 94%;
+  width: 80%;
   scroll-behavior: smooth; }
 
 .section-wrapper {
@@ -588,7 +588,7 @@ p.copy {
 @media screen and (min-width: 64rem) {
   .section {
     max-width: 80rem;
-    width: 85%; }
+    width: 60%; }
 
   .section.flex-wrapper {
     max-width: 80rem;
@@ -1429,11 +1429,29 @@ a.blog-link:hover {
   padding: .5rem .75rem;
   border-radius: 5px;
   /* color: white; */
-  border: 0px solid; }
+  border: 0px solid; 
+}
   .edit-button:focus {
     outline: 0; }
   .edit-button:hover {
     background: #999797;
+    transition: background 0.1s; }
+
+.delete-button{
+  background: none;
+  font-family: 'Clan Book', sans-serif;
+  font-size: 12px;
+  padding: .5rem .75rem;
+  border-radius: 5px;
+  /* color: white; */
+  border: 1px solid #E60032;
+  font-weight: 200; 
+}
+  .delete-button:focus {
+    outline: 0; }
+  .delete-button:hover {
+    background: #E60032;
+    color:#fff;
     transition: background 0.1s; }
 
 .tabulator-col-content {

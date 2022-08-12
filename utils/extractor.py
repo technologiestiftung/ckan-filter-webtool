@@ -176,7 +176,6 @@ def enrich_data(filtered_df):
 
 
     #add empty column Notes
-    filtered_df['Notizen'] = ''
 
     def fill_notizen(row):
         if row['geographische Verfügbarkeit'] != 'landesweit' and row['Raumbezug'] == 'Bezirk':

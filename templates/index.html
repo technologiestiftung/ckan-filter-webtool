@@ -51,13 +51,9 @@
       <div class="map-content green-bg pb-6">
         <div class="section pt-6">
       <p>
-        Die Anwendung wird in drei Schritten bedient.
+        Mit dieser Anwendungen kann abegefragt werden, welche Datensätze im Berliner Open Data Portal vorhanden sind. Das Tool ist dafür erstellt worden, um im speziellen Geodaten zu finden, die zwar als Open Data veröffentlicht, aber noch nicht in der Geodateninfrastruktur Berlin (im Berliner Geodatenpotal, dem FIS-Broker) aufgenommen wurden. Um die Relevanz und Eignung der Datensätze besser bewerten zu können, leitet das Tool automatisiert Informationen über die Verfügbarkeit (berlinweit, nur in einem Bezirk, in mehreren Bezirken), sowie eine erste Priorisierung ab.
+        Durch Anpassen der Stichwortsuche in den erweiterten Einstellung, kann die Datensatzabfrage weiter spezifiziert oder ausgeweitet werden, um zum Beispiel auch nicht-räumliche Daten zu finden.
       </p>
-        <ol>
-          <li>Zunächst werden anhand einer Abfrage des Datenregisters über die CKAN-API alle potentiell relevanten (Geo-)Datensätze herausgefiltert. Dafür werden die Metadaten nach verschiedenen Stichwörtern für einen bestimmten Zeitraum veröffentlicht oder aktualisert wurden gesucht.</li>
-          <li>Im zweiten Schritt sollten die tabellarisch angezeigten Ergebnisse manuell geprüft und um fehlende Informationen ergänzt werden. Die Tabelle ist filter und editierbar. Durch die Spalte zur Priorisierung können die Ergebnisse ausserdem direkt manuell bewertet werden.</li>
-          <li>Zuletzt kann die Ergebnisliste als XLSX oder JSON-Datei für den weiteren Gebrauch und zum Teilen exportiert werden.</li>
-        </ol>
         </div>
       </div>
     
@@ -108,7 +104,7 @@
         <div class="pt-1" style="float:left;">
           <button class="edit-button" id="undo">Rückgänig machen</button>
           <button class="edit-button" id="redo">Wiederholen</button>
-          <button class="edit-button" id="delete-rows" style="">Ausgewählte Reihen löschen</button>
+          <button class="delete-button" id="delete-rows">Ausgewählte Reihen löschen</button>
         </div>
         <div style="display:inline; float: right; padding-top: 0.75rem;">
           <button class="download-button" id="download-json">Download als JSON</button>
@@ -122,17 +118,18 @@
       <h2 class='headline-02 pt-6 mb-1'>Erläuterungen zum Tool</h2>
         <p class="pb-3">
           Dieses Tool dient der Identifikation von Datensätzen aus dem Berliner Datenportal zur Übernahme in die Berliner Geodateninfrastruktur.
-        Die automatische Abfrage kann nur eine erste Annäherung sein. Die Ergebnisse sollten sorgfältig geprüft und fehlende Informationen ergänzt werden:
+          Anhand einer Abfrage des Datenregisters über die CKAN-API werden alle potentiell relevanten (Geo-)Datensätze herausgefiltert. Dafür werden die Metadaten aller Datensatzeinträge für einen bestimmten Zeitraum nach verschiedenen Stichwörtern durchsucht.
+           Die automatische Abfrage kann nur eine erste Annäherung sein, da die Bewertung auf den abgefragten Metadaten beruht, die nicht immer vollständig oder korrekt sind. Die Ergebnisse sollten sorgfältig geprüft und fehlende Informationen ergänzt werden:
         </p>
         <ul class="pb-3">
           <li>Wurden Datensätze fälschlicherweise als Geodaten identifiziert?</li>
           <li>Wurde die geographische Verfügbarkeit des Datensatzes (soweit vorhanden) korrekt identifiziert? Welche geographische Verfügbarkeit weisen Datensätze mit fehlenden Angaben auf?
           <li>Welchen Raumbezug weisen die Datensätze auf?</li>
-          <li>Welche Maßnahmen sind nötig um die Datensätze in Geodatensätze zu überführen? Für Datensätze, die bereits in einem Geodatenformat vorliegen, ist keine Maßnahme nötig (na, not applicable).</li>
           <li>Wie sollten die Datensätze priorisiert werden?</li>
         </ul>
-        <p>Die betreffenden Informationen können direkt in der Tabelle bearbeitet werden.
+        <p>Die betreffenden Informationen können direkt in der Tabelle bearbeitet werden. Die Tabelle ist filter und editierbar. Durch die Spalte zur Priorisierung können die Ergebnisse ausserdem bewertet werden. Das Tool macht bereits einen ersten automatischen Priorisierungsvorschlag, basierend auf der räumlichen Verfügbarkeit, dem Vorhanden sein eines Geoformates und eines Raumbezugs.
         </p>
+        <p>Zuletzt kann die Ergebnisliste als XLSX oder JSON-Datei für den weiteren Gebrauch und zum Teilen exportiert werden.</p>
     </div>
     </div>
     
@@ -363,13 +360,11 @@
     {formatter:"rowSelection", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, cellClick:function(e, cell){
         cell.getRow().toggleSelect();
       }, width: 20},
-      {title:"Titel", field:"Titel", headerMenu:headerMenu, headerPopup:headerPopupFormatter, headerPopupIcon:"<i class='fas fa-filter' title='Spalte filtern'></i>", headerFilter:emptyHeaderFilter, headerFilterFunc:"like", clickPopup:rowPopupFormatter, width: 200},
-      {title:"Beschreibung", field:"Beschreibung", headerMenu:headerMenu, visible: false, width: 400},
-      {title:"Herausgeber:in", field:"Herausgeber:in", headerMenu:headerMenu, clickPopup:rowPopupFormatter, width: 150},
-      {title:"Verfügbarkeit", field:"geographische Verfügbarkeit", editor:"input", width: 130, visible: false},
+      {title:"Verfügbarkeit", field:"geographische Verfügbarkeit", editor:"input", visible: false},
+      {title:"Titel", field:"Titel", headerMenu:headerMenu, headerPopup:headerPopupFormatter, headerPopupIcon:"<i class='fas fa-filter' title='Spalte filtern'></i>", headerFilter:emptyHeaderFilter, headerFilterFunc:"like", clickPopup:rowPopupFormatter},
+      {title:"Herausgeber:in", field:"Herausgeber:in", headerMenu:headerMenu, clickPopup:rowPopupFormatter},
       // {title:"Kontakt", field:"Kontakt", editor:"input", headerMenu:headerMenu},
-      // {title:"Formate", field:"formats", editor:"input", headerMenu:headerMenu},
-      {title:"Geoformat", field:"Geoformat", clickPopup:rowPopupFormatter, width: 105, editor:"input"},
+      {title:"Geoformat", field:"Geoformat", clickPopup:rowPopupFormatter, editor:"input"},
       {title:"Raumbezug", field:"Raumbezug", editor:"input"},
       {title:"Erste Ressource", field:"Link zu einer Ressource", formatter:"link", formatterParams:{
           target:"_blank",
@@ -377,9 +372,9 @@
       {title:"Datensatzeintrag", field:"Link zu Datensatzeintrag", formatter:"link",formatterParams:{
           target:"_blank",
       }, width: 150},
-      //{title:"notwendige Maßnahme zur Geoformatierung", field:"notwendige Maßnahme zur Geoformatierung", editor:"input"},
-      {title:"GDI-Priorisierung", field:"Priorisierung", formatter:"star", editor:true, formatterParams:{stars:5}, hozAlign:"center"},
-      {title:"Notizen", field:"Notizen", editor:"input"}
+      {title:"GDI-Priorisierung", field:"Priorisierung", formatter:"star", editor:true, formatterParams:{stars:5}, hozAlign:"center", width: 150},
+      {title:"Notizen", field:"Notizen", editor:"input"},
+      {title:"Beschreibung", field:"Beschreibung", headerMenu:headerMenu, visible: false},
     ];
 
               // if (target instanceof HTMLElement) {
