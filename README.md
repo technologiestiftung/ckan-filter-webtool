@@ -36,7 +36,8 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/Lisa-Stubert"><img src="https://avatars.githubusercontent.com/u/61182572?v=4?s=64" width="64px;" alt=""/><br /><sub><b>Lisa-Stubert</b></sub></a><br /><a href="https://github.com/technologiestiftung/xml-schema-validator/commits?author=Lisa-Stubert" title="Code">💻</a> <a href="https://github.com/technologiestiftung/xml-schema-validator/commits?author=Lisa-Stubert" title="Documentation">📖</a></td>
+    <td align=“center”><a href=“https://github.com/Lisa-Stubert”><img src=“https://avatars.githubusercontent.com/u/61182572?v=4?s=64” width=“64px;” alt=“”/><br /><sub><b>Lisa-Stubert</b></sub></a><br /><a href=“https://github.com/technologiestiftung/ckan-filter-webtool/commits?author=Lisa-Stubert” title=“Code”>:computer:</a> <a href=“https://github.com/technologiestiftung/ckan-filter-webtool/commits?author=Lisa-Stubert” title=“Documentation”>:book:</a></td>
+    <td align=“center”><a href=“https://github.com/ester-t-s”><img src=“https://avatars.githubusercontent.com/u/91192024?v=4?s=64” width=“64px;” alt=“”/><br /><sub><b>ester-t-s</b></sub></a><br /><a title=“Code”>:computer:</a></td>
   </tr>
 </table>
 
