@@ -51,8 +51,8 @@
       <div class="map-content green-bg pb-6">
         <div class="section pt-6">
       <p>
-        Mit dieser Anwendungen kann abegefragt werden, welche Datensätze im Berliner Open Data Portal vorhanden sind. Das Tool ist dafür erstellt worden, um im speziellen Geodaten zu finden, die zwar als Open Data veröffentlicht, aber noch nicht in der Geodateninfrastruktur Berlin (im Berliner Geodatenpotal, dem FIS-Broker) aufgenommen wurden. Um die Relevanz und Eignung der Datensätze besser bewerten zu können, leitet das Tool automatisiert Informationen über die Verfügbarkeit (berlinweit, nur in einem Bezirk, in mehreren Bezirken), sowie eine erste Priorisierung ab.
-        Durch Anpassen der Stichwortsuche in den erweiterten Einstellung, kann die Datensatzabfrage weiter spezifiziert oder ausgeweitet werden, um zum Beispiel auch nicht-räumliche Daten zu finden.
+        Mit dieser Anwendung kann abgefragt werden, welche Datensätze im Berliner Open-Data-Portal vorhanden sind. Das Tool wurde entwickelt, um speziell die Geodaten zu finden, die zwar als Open Data veröffentlicht, aber noch nicht in der Geodateninfrastruktur Berlin (im Berliner Geodatenpotal, dem FIS-Broker) aufgenommen wurden. Um die Relevanz und Eignung der Datensätze besser bewerten zu können, leitet das Tool aus den Metadaten automatisiert Informationen über die Verfügbarkeit (berlinweit, nur in einem Bezirk, in mehreren Bezirken), sowie eine erste Priorisierung ab. 
+        Durch Anpassen der Stichwortsuche in den erweiterten Einstellungen kann die Datensatzabfrage weiter spezifiziert oder ausgeweitet werden, um zum Beispiel auch nicht-räumliche Daten zu finden.
       </p>
         </div>
       </div>
@@ -62,7 +62,7 @@
       <div class="section pt-6">
         <div class="flex-wrapper col">
           <form action="/api" method="post" enctype="multipart/form-data" target="formDestination" id="form" class="form__validate">
-            <h4 class="bold pb-2">Für welchen Zeitraum möchtest du Metadaten abfragen?</h4>
+            <h4 class="bold pb-2">Für welchen Zeitraum möchtest Du Metadaten abfragen?</h4>
             <label style="padding-right: 0.25rem;" for="start_date">Von</label>
             <input class="filter" style="display:inline; width:110px; background-color: #e6e6e6;" type="date" id="start_date" name="start_date"
             value="2022-01-01"
@@ -86,7 +86,7 @@
                 <label for="gsi">GSI abfragen</label>
               </div>
               <h4 class="bold pt-6 pb-2">Nach welchen Stichworten möchtest Du Datensätze ausschließen?</h4>
-              <p>Datensätze werden angezeigt, wenn Titel oder Beschreibung NICHT mindestens eine dieser Zeichenkombinationen enthalten (auch Teilwörter, kommagetrennt, nicht case sensitive).</p>
+              <p>Datensätze werden angezeigt, wenn Titel oder Beschreibung KEINE dieser Zeichenkombinationen enthalten (auch Teilwörter, kommagetrennt, nicht case sensitive).</p>
               <textarea class="grey-bg" style="height:6em; margin-top: 0.5em;" type="text" id="tags_exclude" name="tags_exclude"></textarea>
             </details>
             <br>
@@ -130,7 +130,8 @@
           <li>Wurde der Raumbezug des Datensatzes (soweit vorhanden) korrekt identifiziert? Welchen Raumbezug weisen Datensätze mit fehlenden Angaben auf?</li>
           <li>Wie sollten die Datensätze priorisiert werden?</li>
         </ul>
-        <p>Die betreffenden Informationen können direkt in der Tabelle bearbeitet werden. Die Daten sind filter-, sortier- und editierbar. Reihen können verschoben und gelöscht werden und Spalten ein- und ausgeblendet. Durch die Spalte zur Priorisierung können die Ergebnisse außerdem bewertet werden. Das Tool macht bereits einen ersten automatischen Priorisierungsvorschlag, basierend auf der räumlichen Verfügbarkeit, dem Vorhanden sein eines Geoformates und eines Raumbezugs.
+        <p>
+          Die betreffenden Informationen können direkt in der Tabelle bearbeitet werden. Die Daten sind filter-, sortier- und editierbar. Mit Klick auf einen Titel oder eine:n Herausgeber:in wird die Beschreibung zum Datensatz angezeigt. Reihen können verschoben und gelöscht und Spalten über die drei Punkte ein- und ausgeblendet. Durch die Spalte zur Priorisierung können die Ergebnisse außerdem bewertet werden. Das Tool macht bereits einen ersten automatischen Priorisierungsvorschlag basierend auf der räumlichen Verfügbarkeit, dem Vorhandensein eines Geoformates und eines klaren Raumbezugs.
         </p>
         <p>Zuletzt kann die Ergebnisliste als XLSX oder JSON-Datei für den weiteren Gebrauch und zum Teilen exportiert werden.</p>
     </div>
