@@ -366,6 +366,7 @@
       }, width: 20},
       {title:"Verfügbarkeit", field:"geographische Verfügbarkeit", editor:"input", visible: false, download:true},
       {title:"Titel", field:"Titel", widthGrow:2, headerMenu:headerMenu, headerPopup:headerPopupFormatter, headerPopupIcon:"<i class='fas fa-filter' title='Spalte filtern'></i>", headerFilter:emptyHeaderFilter, headerFilterFunc:"like", clickPopup:rowPopupFormatter},
+      {title:"Beschreibung", field:"Beschreibung", headerMenu:headerMenu, visible: false,  minWidth:250},
       {title:"Herausgeber:in", field:"Herausgeber:in", headerMenu:headerMenu, clickPopup:rowPopupFormatter},
       // {title:"Kontakt", field:"Kontakt", editor:"input", headerMenu:headerMenu},
       {title:"Geoformat", field:"Geoformat", clickPopup:rowPopupFormatter, editor:"input"},
@@ -378,7 +379,6 @@
       }},
       {title:"GDI-Priorisierung", field:"Priorisierung", formatter:"star", editor:true, formatterParams:{stars:5}, hozAlign:"center", width: 150},
       {title:"Notizen", field:"Notizen", editor:"input"},
-      {title:"Beschreibung", field:"Beschreibung", headerMenu:headerMenu, visible: false},
     ];
 
   var de = {
