@@ -83,7 +83,7 @@ def extract_columns(datasets_list):
                 else:
                     existing_geoformats = str(existing_geoformats) +", " + str(f)
         if existing_geoformats == "":
-            existing_geoformats = "-"
+            existing_geoformats = "keines"
         datasets_df.loc[index,'Geoformat'] = existing_geoformats
 
     return datasets_df
@@ -168,7 +168,7 @@ def enrich_data(filtered_df):
         else:
             prio += 0
 
-        if row['Geoformat'] != '-':
+        if row['Geoformat'] != 'keines':
             if row['Raumbezug'] != 'Bezirk' and row['Raumbezug'] != '?':
                 prio += 3
             else:
@@ -188,7 +188,7 @@ def enrich_data(filtered_df):
 
     def fill_notizen(row):
         if row['geographische Verfügbarkeit'] != 'landesweit' and row['Raumbezug'] == 'Bezirk':
-            return 'Achtung: Der Raumbezug scheint in den Metadaten nicht korrekt angeben worden zu sein.'
+            return 'Achtung: Der Raumbezug scheint in den Metadaten nicht korrekt angegeben worden zu sein.'
         else: 
             return ''
 
