@@ -9,7 +9,7 @@ def fetch_data(start_date, end_date):
     datasets_list= []
     time_interval = '[' + start_date + ' TO ' + end_date + ']'
 
-    for i in [0,1000,2000,3000]:
+    for i in [0,1000,2000,3000,4000]:
         endpoint_packages = 'https://datenregister.berlin.de/api/action/package_search?q=date_released:' + time_interval + ' OR date_updated:' + time_interval + '&rows=1000&start=' + str(i)
         # make the http request get
         response = requests.get(endpoint_packages)
@@ -23,7 +23,7 @@ def fetch_data(start_date, end_date):
 
 def extract_columns(datasets_list):
     #extract titles, ids, notes, authors, source, date, contact, resource link
-    titles, ids, notes, author, source, contact, resource, geographical_granularity = [], [], [], [], [], [], [], []
+    titles, ids, notes, author, source, contact, resource, geographical_granularity, date_released, date_updated = [], [], [], [], [], [], [], [], [], []
     for i in range(0, len(datasets_list)):
         titles.append(datasets_list[i]['title'])
         ids.append(datasets_list[i]['id'])
@@ -31,6 +31,11 @@ def extract_columns(datasets_list):
         author.append(datasets_list[i]['author'])
         source.append(datasets_list[i]['berlin_source'])
         contact.append(datasets_list[i]['maintainer_email'])
+        date_released.append(datasets_list[i]['date_released'])
+        try:
+            date_updated.append(datasets_list[i]['date_updated'])
+        except:
+            date_updated.append('Erstveröffentlichung')
         try:
             if datasets_list[i]['geographical_granularity'] != "Berlin":
                 geographical_granularity.append(datasets_list[i]['geographical_granularity'])
@@ -61,10 +66,10 @@ def extract_columns(datasets_list):
     formats_df.rename(columns = {'index':'id'}, inplace = True)
 
     #combine lists in one list
-    zipped = list(zip(titles, notes, ids, author, source, contact, resource, geographical_granularity))
+    zipped = list(zip(titles, notes, ids, author, source, contact, resource, geographical_granularity, date_released, date_updated))
 
     #combine lists in a dataframe
-    datasets_df = pd.DataFrame(zipped, columns=['Titel', 'Beschreibung', 'id', 'Herausgeber:in', 'source', 'Kontakt', 'Link zu einer Ressource', 'Raumbezug'])
+    datasets_df = pd.DataFrame(zipped, columns=['Titel', 'Beschreibung', 'id', 'Herausgeber:in', 'source', 'Kontakt', 'Link zu einer Ressource', 'Raumbezug', "Erstveröffentlichung", "Aktualisierung"])
 
     #join with formats_df
     datasets_df = pd.merge(datasets_df, formats_df, on='id', how="outer")
