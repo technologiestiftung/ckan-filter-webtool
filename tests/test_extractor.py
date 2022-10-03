@@ -37,7 +37,7 @@ def test_extract_columns():
 
     assert isinstance(datasets_df, pd.DataFrame)
 
-    expected_headers = ['Titel', 'Beschreibung', 'id', 'Herausgeber:in', 'source', 'Kontakt', 'Link zu einer Ressource', 'formats', 'Geoformat']
+    expected_headers = ['Titel', 'Beschreibung', 'id', 'Herausgeber:in', 'source', 'Kontakt', 'Link zu einer Ressource', 'formats', 'Geoformat', 'Erstveröffentlichung', 'Aktualisierung']
 
     for expected_header in expected_headers:
         assert expected_header in datasets_df
@@ -51,7 +51,7 @@ def test_filter_data():
     datasets_df = extractor.extract_columns(datasets_list)
     filtered_df = extractor.filter_data(datasets_df, TAGS_INCLUDE, TAGS_EXCLUDE, FISBROKER, GSI)
 
-    expected_headers = ['Titel', 'Beschreibung', 'Herausgeber:in', 'Kontakt', 'Link zu einer Ressource', 'Geoformat']
+    expected_headers = ['Titel', 'Beschreibung', 'Herausgeber:in', 'Kontakt', 'Link zu einer Ressource', 'Geoformat', 'Erstveröffentlichung', 'Aktualisierung']
 
     for expected_header in expected_headers:
         assert expected_header in datasets_df
@@ -66,7 +66,7 @@ def test_enrich_data():
     filtered_df = extractor.filter_data(datasets_df, TAGS_INCLUDE, TAGS_EXCLUDE, FISBROKER, GSI)
     enriched_df = extractor.enrich_data(filtered_df)
 
-    expected_headers =  ['Titel', 'Beschreibung', 'Herausgeber:in', 'Kontakt', 'Link zu einer Ressource', 'Geoformat', 'Link zu Datensatzeintrag', 'geographische Verfügbarkeit', 'Raumbezug', 'notwendige Maßnahme zur Geoformatierung', 'Priorisierung', 'Notizen']
+    expected_headers =  ['Titel', 'Beschreibung', 'Herausgeber:in', 'Kontakt', 'Link zu einer Ressource', 'Geoformat', 'Link zu Datensatzeintrag', 'geographische Verfügbarkeit', 'Raumbezug', 'notwendige Maßnahme zur Geoformatierung', 'Priorisierung', 'Notizen', 'Erstveröffentlichung', 'Aktualisierung']
 
     for expected_header in expected_headers:
         assert expected_header in enriched_df
@@ -81,7 +81,7 @@ def test_transform_to_json():
     enriched_df = extractor.enrich_data(filtered_df)
     parsed = extractor.transform_to_json(enriched_df)
 
-    expected_headers =  ['Titel', 'Beschreibung', 'Herausgeber:in', 'Kontakt', 'Link zu einer Ressource', 'Geoformat', 'Link zu Datensatzeintrag', 'geographische Verfügbarkeit', 'Raumbezug', 'notwendige Maßnahme zur Geoformatierung', 'Priorisierung', 'Notizen']
+    expected_headers =  ['Titel', 'Beschreibung', 'Herausgeber:in', 'Kontakt', 'Link zu einer Ressource', 'Geoformat', 'Link zu Datensatzeintrag', 'geographische Verfügbarkeit', 'Raumbezug', 'notwendige Maßnahme zur Geoformatierung', 'Priorisierung', 'Notizen', 'Erstveröffentlichung', 'Aktualisierung']
     for expected_header in expected_headers:
         assert expected_header in parsed[1]
 
