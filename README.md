@@ -2,11 +2,13 @@
 
 # CKAN Filter Webtool
 
-wip
+This application can be used to query which datasets are available in the Berlin Open Data Portal. The tool was developed to specifically find geodata that have been published as Open Data but have not yet been included in the Berlin Spatial Data Infrastructure (in the Berlin Geodata Portal, the FIS broker). To better assess the relevance and suitability of the datasets, the tool automatically derives information about availability (Berlin-wide, only in one district, in several districts), as well as an initial prioritization, from the metadata. By customizing the keyword search in the advanced settings, the dataset query can be further specified or expanded to find non-spatial data, for example.
 
 ## Background
 
-wip
+The Berlin administration makes geodata available as open data via the FIS Broker. In addition to data sets that are collected and managed, i.e. that spatially cover the entire city of Berlin, there are a large number of other geodata that are the decentralized responsibility of the districts. Thus, not only the main administrations are data suppliers, but also all district administrations that independently collect geodata for their district. 
+
+The project for the integration of district geodata into the geodata infrastructure (GDI) of the state of Berlin, commissioned by the Senate Department for Urban Development and Housing, has taken on the task of sounding out corresponding needs for processing and developing routines to standardize geodata records of all districts and to simplify merging. 
 
 ## Deployment
 
@@ -49,6 +51,8 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
 
 ## Credits
+
+ODIS is supported by the Senate Department for Economic Economics, Energy and Public Enterprises and Investitionsbank Berlin from the funds of the State of Berlin. The tool was developed as part of a project with the Senate Department for Urban Development, Building and Housing.
 
 <table>
   <tr>
